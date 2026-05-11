@@ -1,0 +1,39 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -E \"README|\\\\.md$\")",
+      "Bash(npm test *)",
+      "Bash(npx tsc *)",
+      "Bash(echo \"---exit:$?---\")",
+      "Bash(npm run *)",
+      "Bash(echo \"---tsc:$?---\")",
+      "Bash(echo \"tsc:$?\")",
+      "Bash(node *)",
+      "Bash(pkill -f \"next dev\")",
+      "Bash(npx tsx *)",
+      "Bash(wait)",
+      "Bash(npm audit *)",
+      "Bash(grep -rn -E \"\\(eval|exec|child_process|spawn|require\\\\\\\\\\(.+\\\\\\\\$|innerHTML|dangerouslySetInnerHTML\\)\" --include=\"*.ts\" --include=\"*.tsx\" lib/ components/ app/ scripts/)",
+      "Bash(kill %1)",
+      "Bash(lsof -ti:3000)",
+      "Bash(xargs kill)",
+      "Read(//Users/a1111/**)",
+      "Bash(cp \"/Users/a1111/Desktop/Photo_concept/PD09_Sticker/Gemini_Generated_Image_3cgnh3cgnh3cgnh3.png\" /Users/a1111/Desktop/ozcoding-pd09-booth/public/stickers/characters-set-a.png)",
+      "Bash(cp \"/Users/a1111/Downloads/Gemini_Generated_Image_j3weiwj3weiwj3we.png\" /Users/a1111/Desktop/ozcoding-pd09-booth/public/stickers/characters-set-b.png)",
+      "Bash(cp \"/Users/a1111/Downloads/Gemini_Generated_Image_4q5x4c4q5x4c4q5x.png\" /Users/a1111/Desktop/ozcoding-pd09-booth/public/stickers/poster-reference.png)",
+      "Bash(echo \"---exit: $?\")",
+      "Bash(cp \"/Users/a1111/Downloads/for background.jpeg\" /Users/a1111/Desktop/ozcoding-pd09-booth/public/backgrounds/halftone-pink.jpeg)",
+      "Bash(cp \"/Users/a1111/Downloads/ンデ   ⸝ ۟   ✿𝅼   𝗅𝗈v͟e͟  𝗆𝖾𝗅𝗈𝖽ı𝖾𝗌.jpeg\" /Users/a1111/Desktop/ozcoding-pd09-booth/public/backgrounds/sunburst-pink.jpeg)",
+      "Bash(cp \"/Users/a1111/Downloads/ꢤꢆ  ׅ ๋  𝚜𝒕α𝑟   ⸰ ׁ.jpeg\" /Users/a1111/Desktop/ozcoding-pd09-booth/public/backgrounds/stars-pink.jpeg)",
+      "Bash(cp \"/Users/a1111/Downloads/𓈒   ݁  Sabor vainilla  ᨦദ   ֺ  𓂂.jpeg\" /Users/a1111/Desktop/ozcoding-pd09-booth/public/backgrounds/clovers-mint.jpeg)",
+      "Bash(cp \"/Users/a1111/Downloads/_ \\(37\\).jpeg\" /Users/a1111/Desktop/ozcoding-pd09-booth/public/backgrounds/sparkles-blue.jpeg)",
+      "Bash(npm install *)",
+      "Bash(xargs kill -9)",
+      "Bash(curl -sf -o /dev/null -w \"HTTP %{http_code}\\\\n\" http://localhost:3000/)",
+      "Bash(npx vitest *)",
+      "Bash(gh auth *)",
+      "Bash(git init *)",
+      "Bash(git add *)"
+    ]
+  }
+}

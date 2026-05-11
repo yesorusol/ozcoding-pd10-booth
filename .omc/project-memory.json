@@ -1,0 +1,453 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1778390947114,
+  "projectRoot": "/Users/a1111/Desktop/ozcoding-pd09-booth",
+  "techStack": {
+    "languages": [
+      {
+        "name": "JavaScript/TypeScript",
+        "version": ">=20",
+        "confidence": "high",
+        "markers": [
+          "package.json"
+        ]
+      },
+      {
+        "name": "TypeScript",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "tsconfig.json"
+        ]
+      }
+    ],
+    "frameworks": [
+      {
+        "name": "next",
+        "version": "15",
+        "category": "fullstack"
+      },
+      {
+        "name": "react",
+        "version": "19",
+        "category": "frontend"
+      },
+      {
+        "name": "react-dom",
+        "version": "19",
+        "category": "frontend"
+      },
+      {
+        "name": "vitest",
+        "version": "2",
+        "category": "testing"
+      }
+    ],
+    "packageManager": "npm",
+    "runtime": "Node.js 20"
+  },
+  "build": {
+    "buildCommand": "npm run build",
+    "testCommand": "npm test",
+    "lintCommand": "npm run lint",
+    "devCommand": "npm run dev",
+    "scripts": {
+      "dev": "next dev",
+      "build": "next build",
+      "start": "next start",
+      "kiosk": "next build && next start -p 3000",
+      "lint": "next lint",
+      "typecheck": "tsc --noEmit",
+      "test": "vitest run",
+      "test:watch": "vitest",
+      "preprocess": "tsx scripts/preprocess-frames.ts"
+    }
+  },
+  "conventions": {
+    "namingStyle": "camelCase",
+    "importStyle": null,
+    "testPattern": null,
+    "fileOrganization": null
+  },
+  "structure": {
+    "isMonorepo": false,
+    "workspaces": [],
+    "mainDirectories": [
+      "app",
+      "components",
+      "lib",
+      "public",
+      "scripts"
+    ],
+    "gitBranches": null
+  },
+  "customNotes": [],
+  "directoryMap": {
+    "app": {
+      "path": "app",
+      "purpose": "Application code",
+      "fileCount": 4,
+      "lastAccessed": 1778390947102,
+      "keyFiles": [
+        "globals.css",
+        "layout.tsx",
+        "page.test.tsx",
+        "page.tsx"
+      ]
+    },
+    "components": {
+      "path": "components",
+      "purpose": "UI components",
+      "fileCount": 22,
+      "lastAccessed": 1778390947102,
+      "keyFiles": [
+        "BoothPageRouter.test.tsx",
+        "BoothPageRouter.tsx",
+        "BoothSideRail.tsx",
+        "Bubble.tsx",
+        "CabinetChrome.tsx"
+      ]
+    },
+    "lib": {
+      "path": "lib",
+      "purpose": "Library code",
+      "fileCount": 23,
+      "lastAccessed": 1778390947104,
+      "keyFiles": [
+        "booth-mode.test.ts",
+        "booth-mode.ts",
+        "capture.test.ts",
+        "capture.ts",
+        "captures-server.test.ts"
+      ]
+    },
+    "public": {
+      "path": "public",
+      "purpose": "Public files",
+      "fileCount": 0,
+      "lastAccessed": 1778390947105,
+      "keyFiles": []
+    },
+    "scripts": {
+      "path": "scripts",
+      "purpose": "Build/utility scripts",
+      "fileCount": 3,
+      "lastAccessed": 1778390947105,
+      "keyFiles": [
+        "generate-normal-overlay.ts",
+        "preprocess-frames.test.ts",
+        "preprocess-frames.ts"
+      ]
+    },
+    "app/api": {
+      "path": "app/api",
+      "purpose": "API routes",
+      "fileCount": 0,
+      "lastAccessed": 1778390947105,
+      "keyFiles": []
+    }
+  },
+  "hotPaths": [
+    {
+      "path": "components/CabinetChrome.tsx",
+      "accessCount": 33,
+      "lastAccessed": 1778262009570,
+      "type": "file"
+    },
+    {
+      "path": "app/page.tsx",
+      "accessCount": 30,
+      "lastAccessed": 1778405999317,
+      "type": "file"
+    },
+    {
+      "path": "lib/copy.ts",
+      "accessCount": 29,
+      "lastAccessed": 1778405980699,
+      "type": "file"
+    },
+    {
+      "path": "components/ThemedFlow.tsx",
+      "accessCount": 27,
+      "lastAccessed": 1778407279613,
+      "type": "file"
+    },
+    {
+      "path": "lib/session-machine.ts",
+      "accessCount": 26,
+      "lastAccessed": 1778422420201,
+      "type": "file"
+    },
+    {
+      "path": "lib/overlay-composer.ts",
+      "accessCount": 23,
+      "lastAccessed": 1778422712865,
+      "type": "file"
+    },
+    {
+      "path": "app/booth/page.tsx",
+      "accessCount": 20,
+      "lastAccessed": 1778404313226,
+      "type": "file"
+    },
+    {
+      "path": "components/ModeSelect.tsx",
+      "accessCount": 19,
+      "lastAccessed": 1778262013663,
+      "type": "file"
+    },
+    {
+      "path": "components/LiveOverlay.tsx",
+      "accessCount": 18,
+      "lastAccessed": 1778399815088,
+      "type": "file"
+    },
+    {
+      "path": "lib/types.ts",
+      "accessCount": 15,
+      "lastAccessed": 1778486805399,
+      "type": "file"
+    },
+    {
+      "path": "lib/frames.ts",
+      "accessCount": 13,
+      "lastAccessed": 1778236383896,
+      "type": "file"
+    },
+    {
+      "path": "components/MarqueeSign.tsx",
+      "accessCount": 12,
+      "lastAccessed": 1778139929299,
+      "type": "file"
+    },
+    {
+      "path": "components/ModeSelect.test.tsx",
+      "accessCount": 11,
+      "lastAccessed": 1778260735484,
+      "type": "file"
+    },
+    {
+      "path": "lib/session-machine.test.ts",
+      "accessCount": 11,
+      "lastAccessed": 1778262698530,
+      "type": "file"
+    },
+    {
+      "path": "lib/capture.ts",
+      "accessCount": 10,
+      "lastAccessed": 1778237377496,
+      "type": "file"
+    },
+    {
+      "path": "lib/upload-sheet.ts",
+      "accessCount": 10,
+      "lastAccessed": 1778486578110,
+      "type": "file"
+    },
+    {
+      "path": "lib/use-camera.ts",
+      "accessCount": 9,
+      "lastAccessed": 1778400308583,
+      "type": "file"
+    },
+    {
+      "path": "components/Bubble.tsx",
+      "accessCount": 8,
+      "lastAccessed": 1778258716353,
+      "type": "file"
+    },
+    {
+      "path": "app/globals.css",
+      "accessCount": 8,
+      "lastAccessed": 1778258719012,
+      "type": "file"
+    },
+    {
+      "path": "components/LiveOverlay.test.tsx",
+      "accessCount": 7,
+      "lastAccessed": 1778236763389,
+      "type": "file"
+    },
+    {
+      "path": "lib/sheet-composer.ts",
+      "accessCount": 7,
+      "lastAccessed": 1778237379637,
+      "type": "file"
+    },
+    {
+      "path": "components/ScaleToFit.tsx",
+      "accessCount": 7,
+      "lastAccessed": 1778399814859,
+      "type": "file"
+    },
+    {
+      "path": "lib/booth-mode.ts",
+      "accessCount": 6,
+      "lastAccessed": 1778259922965,
+      "type": "file"
+    },
+    {
+      "path": "tailwind.config.ts",
+      "accessCount": 6,
+      "lastAccessed": 1778260435626,
+      "type": "file"
+    },
+    {
+      "path": "app/layout.tsx",
+      "accessCount": 6,
+      "lastAccessed": 1778422406038,
+      "type": "file"
+    },
+    {
+      "path": "components/QRScreen.tsx",
+      "accessCount": 6,
+      "lastAccessed": 1778489186788,
+      "type": "file"
+    },
+    {
+      "path": "components/CameraDeniedBanner.tsx",
+      "accessCount": 5,
+      "lastAccessed": 1778236382068,
+      "type": "file"
+    },
+    {
+      "path": "vitest.setup.ts",
+      "accessCount": 5,
+      "lastAccessed": 1778237378653,
+      "type": "file"
+    },
+    {
+      "path": "lib/overlay-composer.test.ts",
+      "accessCount": 5,
+      "lastAccessed": 1778237384764,
+      "type": "file"
+    },
+    {
+      "path": "components/Countdown.tsx",
+      "accessCount": 5,
+      "lastAccessed": 1778263922690,
+      "type": "file"
+    },
+    {
+      "path": "lib/normal-layout.ts",
+      "accessCount": 5,
+      "lastAccessed": 1778420270541,
+      "type": "file"
+    },
+    {
+      "path": "app/api/captures/route.ts",
+      "accessCount": 5,
+      "lastAccessed": 1778486856838,
+      "type": "file"
+    },
+    {
+      "path": "vitest.config.ts",
+      "accessCount": 4,
+      "lastAccessed": 1778236392865,
+      "type": "file"
+    },
+    {
+      "path": "lib/capture.test.ts",
+      "accessCount": 4,
+      "lastAccessed": 1778236572919,
+      "type": "file"
+    },
+    {
+      "path": "package.json",
+      "accessCount": 4,
+      "lastAccessed": 1778486572849,
+      "type": "file"
+    },
+    {
+      "path": "components/CutPreview.tsx",
+      "accessCount": 3,
+      "lastAccessed": 1778236382295,
+      "type": "file"
+    },
+    {
+      "path": "components/CameraDeniedBanner.test.tsx",
+      "accessCount": 3,
+      "lastAccessed": 1778236384935,
+      "type": "file"
+    },
+    {
+      "path": "lib/__benchmarks__/themed-compose-baseline.ts",
+      "accessCount": 3,
+      "lastAccessed": 1778237366275,
+      "type": "file"
+    },
+    {
+      "path": "lib/booth-mode.test.ts",
+      "accessCount": 3,
+      "lastAccessed": 1778237383626,
+      "type": "file"
+    },
+    {
+      "path": "lib/normal-layout.test.ts",
+      "accessCount": 3,
+      "lastAccessed": 1778237384397,
+      "type": "file"
+    },
+    {
+      "path": "scripts/preprocess-frames.ts",
+      "accessCount": 2,
+      "lastAccessed": 1778135216970,
+      "type": "file"
+    },
+    {
+      "path": "lib/sheet-composer.test.ts",
+      "accessCount": 2,
+      "lastAccessed": 1778236366101,
+      "type": "file"
+    },
+    {
+      "path": "lib/cover-crop-math.ts",
+      "accessCount": 2,
+      "lastAccessed": 1778236366466,
+      "type": "file"
+    },
+    {
+      "path": "components/RadialDots.tsx",
+      "accessCount": 2,
+      "lastAccessed": 1778263286312,
+      "type": "file"
+    },
+    {
+      "path": "lib/captures-server.ts",
+      "accessCount": 2,
+      "lastAccessed": 1778486580286,
+      "type": "file"
+    },
+    {
+      "path": "lib/captures-server.test.ts",
+      "accessCount": 2,
+      "lastAccessed": 1778486809635,
+      "type": "file"
+    },
+    {
+      "path": "lib/use-camera.test.ts",
+      "accessCount": 1,
+      "lastAccessed": 1778129544048,
+      "type": "file"
+    },
+    {
+      "path": "scripts/preprocess-frames.test.ts",
+      "accessCount": 1,
+      "lastAccessed": 1778135183563,
+      "type": "file"
+    },
+    {
+      "path": "lib/upload-sheet.test.ts",
+      "accessCount": 1,
+      "lastAccessed": 1778147899179,
+      "type": "file"
+    },
+    {
+      "path": "components/QRScreen.test.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1778148004213,
+      "type": "file"
+    }
+  ],
+  "userDirectives": []
+}

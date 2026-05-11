@@ -1,0 +1,48 @@
+{
+  "name": "ozcoding-pd09-booth",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "kiosk": "next build && next start -p 3000",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "preprocess": "tsx scripts/preprocess-frames.ts"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.105.4",
+    "next": "15",
+    "qrcode": "^1.5.4",
+    "react": "19",
+    "react-dom": "19",
+    "sharp": "^0.33.5"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6",
+    "@testing-library/react": "^16",
+    "@testing-library/user-event": "^14",
+    "@types/node": "^22",
+    "@types/qrcode": "^1.5.5",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@vitejs/plugin-react": "^4",
+    "@vitest/ui": "^2",
+    "autoprefixer": "^10",
+    "eslint": "^9",
+    "eslint-config-next": "15",
+    "jsdom": "^25",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.17",
+    "tsx": "^4",
+    "typescript": "5",
+    "vitest": "^2"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

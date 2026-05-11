@@ -1,0 +1,79 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+/* School-locker background — light cyan steel doors with subtle vent slats. */
+body {
+  background-color: #a8d6e8;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 400'><rect width='200' height='400' fill='%23a8d6e8'/><rect x='198' y='0' width='2' height='400' fill='%237dbacd'/><rect x='0' y='398' width='200' height='2' fill='%237dbacd'/><g><rect x='70' y='62' width='60' height='3' fill='%237dbacd'/><rect x='70' y='65' width='60' height='1' fill='%23c8e6f1'/><rect x='70' y='72' width='60' height='3' fill='%237dbacd'/><rect x='70' y='75' width='60' height='1' fill='%23c8e6f1'/><rect x='70' y='82' width='60' height='3' fill='%237dbacd'/><rect x='70' y='85' width='60' height='1' fill='%23c8e6f1'/></g></svg>");
+  background-size: 200px 400px;
+  background-repeat: repeat;
+  font-family: var(--font-body), "Noto Sans KR", system-ui, sans-serif;
+  color: #1d2c4a;
+}
+
+/* CRT screen interior — cream + soft scanlines */
+.crt-screen {
+  background-color: #fff8e0;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.04) 0px,
+      rgba(0, 0, 0, 0.04) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+  border: 1.5px solid #1d2c4a;
+  border-radius: 16px;
+}
+
+/* Wordmark text — green→white vertical gradient with thin black outline */
+.wordmark {
+  background: linear-gradient(180deg, #3fbb4a 0%, #d4ffb8 55%, #ffffff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-stroke: 1.5px #1d2c4a;
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.6);
+  letter-spacing: 0.02em;
+}
+
+/* Single-shot 200ms full-white flash for the booth shutter (epilepsy-safe). */
+@keyframes boothFlash {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.2;
+  }
+}
+
+/* Sparkle dots — used on hero containers */
+.sparkles::before,
+.sparkles::after {
+  content: "✦";
+  position: absolute;
+  color: #ffffff;
+  text-shadow: 0 0 6px rgba(255, 255, 255, 0.8);
+  font-size: 1.5rem;
+  pointer-events: none;
+}
+
+.sparkles::before {
+  top: 8%;
+  left: 6%;
+}
+
+.sparkles::after {
+  top: 14%;
+  right: 8%;
+}

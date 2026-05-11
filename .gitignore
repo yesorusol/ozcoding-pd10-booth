@@ -1,0 +1,26 @@
+# dependencies
+node_modules/
+
+# Next.js build output
+.next/
+out/
+
+# environment files
+.env*
+!.env.local.example
+
+# runtime captures (gitignored; wiped on power-off by design)
+public/captures/
+
+# macOS
+.DS_Store
+
+# logs
+*.log
+npm-debug.log*
+
+# omc state (keep specs and plans tracked)
+.omc/state/
+
+# TypeScript incremental build cache
+tsconfig.tsbuildinfo

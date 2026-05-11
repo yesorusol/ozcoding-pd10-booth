@@ -1,0 +1,18 @@
+# Local kiosk captures — runtime now uses Supabase Storage; the on-disk
+# folder only holds dev artifacts.
+public/captures
+
+# Source sprite sheets — split into per-asset PNGs by build scripts; the
+# sheets themselves are never served.
+public/stickers/characters-set-a.png
+public/stickers/characters-set-b.png
+public/stickers/poster-reference.png
+public/stickers/zep-pack.png
+
+# Build-time only — not needed at runtime.
+scripts
+
+# Editor + tool state (mirrors .gitignore).
+.omc
+.claude
+PD09_Sticker

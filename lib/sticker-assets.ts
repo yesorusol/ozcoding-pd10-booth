@@ -32,20 +32,46 @@ export const CHARACTER_STICKERS: ReadonlyArray<StickerAsset> = [
 
 export type EmojiSticker = {
   id: string;
-  emoji: string;
   label: string;
+  /** Text glyph rendered with the system emoji font when set. */
+  emoji?: string;
+  /**
+   * Public URL of a transparent PNG. When set, the picker and final
+   * composer render this image instead of the text glyph. ZEP pixel-frame
+   * icons live under `/stickers/zep/`.
+   */
+  iconSrc?: string;
 };
 
-/** Extra emoji-only stickers for variety; rendered as plain text. */
+/**
+ * Basic Unicode emoji palette. Rendered as text in the picker + composer.
+ * 24 entries → 2 pages of 12 in the picker (paginated via arrows).
+ */
 export const EMOJI_STICKERS: ReadonlyArray<EmojiSticker> = [
-  { id: "em-heart", emoji: "💖", label: "하트" },
-  { id: "em-sparkle", emoji: "✨", label: "반짝임" },
+  { id: "em-heart-pink", emoji: "💖", label: "핫핑크 하트" },
+  { id: "em-heart-red", emoji: "❤️", label: "빨강 하트" },
+  { id: "em-heart-pulse", emoji: "💗", label: "분홍 하트" },
+  { id: "em-heart-baby", emoji: "🩷", label: "베이비핑크 하트" },
   { id: "em-star", emoji: "⭐", label: "별" },
-  { id: "em-fire", emoji: "🔥", label: "불꽃" },
+  { id: "em-star-glow", emoji: "🌟", label: "빛나는 별" },
+  { id: "em-sparkle", emoji: "✨", label: "반짝임" },
+  { id: "em-dizzy", emoji: "💫", label: "회오리 별" },
   { id: "em-rainbow", emoji: "🌈", label: "무지개" },
+  { id: "em-fire", emoji: "🔥", label: "불꽃" },
+  { id: "em-crown", emoji: "👑", label: "왕관" },
+  { id: "em-ribbon", emoji: "🎀", label: "리본" },
+  { id: "em-sunglasses", emoji: "🕶️", label: "선글라스" },
+  { id: "em-glasses", emoji: "👓", label: "안경" },
+  { id: "em-speech", emoji: "💬", label: "말풍선" },
+  { id: "em-squirrel", emoji: "🐿️", label: "다람쥐" },
+  { id: "em-baseball", emoji: "⚾", label: "야구공" },
+  { id: "em-hammer", emoji: "🔨", label: "망치" },
+  { id: "em-trophy", emoji: "🏆", label: "트로피" },
+  { id: "em-cherry-blossom", emoji: "🌸", label: "벚꽃" },
   { id: "em-camera", emoji: "📸", label: "카메라" },
   { id: "em-party", emoji: "🎉", label: "파티" },
   { id: "em-confetti", emoji: "🎊", label: "꽃가루" },
+  { id: "em-hibiscus", emoji: "🌺", label: "히비스커스" },
 ];
 
 /** Discriminated union for placed sticker instances on the photo. */
@@ -71,8 +97,35 @@ export type PlacedStickerInstance =
       yPct: number;
       scale: number;
       rotationDeg: number;
+    }
+  | {
+      kind: "text";
+      instanceId: string;
+      /** User-typed text content. */
+      text: string;
+      /** CSS hex color for the rendered glyphs. */
+      color: string;
+      xPct: number;
+      yPct: number;
+      scale: number;
+      rotationDeg: number;
     };
 
 export const DEFAULT_STICKER_SCALE = 1.0;
 export const MIN_STICKER_SCALE = 0.3;
 export const MAX_STICKER_SCALE = 3.0;
+
+/** Color presets shown in the text-sticker UI. */
+export const TEXT_STICKER_COLORS: ReadonlyArray<{ id: string; hex: string; label: string }> = [
+  { id: "white", hex: "#ffffff", label: "화이트" },
+  { id: "black", hex: "#1a1a1a", label: "블랙" },
+  { id: "red", hex: "#e63946", label: "레드" },
+  { id: "pink", hex: "#ff6fa8", label: "핑크" },
+  { id: "yellow", hex: "#fbbf24", label: "옐로" },
+  { id: "mint", hex: "#4ade80", label: "민트" },
+  { id: "sky", hex: "#38bdf8", label: "스카이" },
+  { id: "purple", hex: "#a78bfa", label: "퍼플" },
+];
+
+export const DEFAULT_TEXT_COLOR = "#1a1a1a";
+export const MAX_TEXT_LENGTH = 20;

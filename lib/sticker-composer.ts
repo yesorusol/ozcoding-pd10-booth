@@ -17,6 +17,20 @@ import {
 
 const CHAR_SIZE_FRAC = 0.2;
 const EMOJI_SIZE_FRAC = 0.14;
+const TEXT_SIZE_FRAC = 0.08;
+
+/**
+ * Resolve the next/font-generated family name for the pixel display font
+ * (DotGothic16) so canvas `ctx.font` can reference it. Returns a quoted
+ * shorthand that already includes fallbacks.
+ */
+function pixelFontFamily(): string {
+  if (typeof window === "undefined") return "system-ui, sans-serif";
+  const raw = getComputedStyle(document.documentElement)
+    .getPropertyValue("--font-pixel-display")
+    .trim();
+  return raw ? `${raw}, system-ui, sans-serif` : "system-ui, sans-serif";
+}
 
 function loadImage(src: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
@@ -63,12 +77,15 @@ export async function composeStickersOnto({
     // 1. Base sheet
     ctx.drawImage(baseImg, 0, 0);
 
-    // 2. Preload all unique character images in parallel
+    // 2. Preload all unique character + image-emoji sources in parallel.
     const uniqueSources = new Set<string>();
     for (const s of stickers) {
       if (s.kind === "character") {
         const asset = CHARACTER_STICKERS.find((c) => c.id === s.assetId);
         if (asset) uniqueSources.add(asset.src);
+      } else if (s.kind === "emoji") {
+        const emoji = EMOJI_STICKERS.find((e) => e.id === s.emojiId);
+        if (emoji?.iconSrc) uniqueSources.add(emoji.iconSrc);
       }
     }
     const sourceImages = new Map<string, HTMLImageElement>();
@@ -81,6 +98,19 @@ export async function composeStickersOnto({
     // 3. Draw each sticker in placement order (z-index = array index)
     const charBaseSize = canvas.width * CHAR_SIZE_FRAC;
     const emojiSize = canvas.width * EMOJI_SIZE_FRAC;
+    const textSize = canvas.width * TEXT_SIZE_FRAC;
+    const textFontFamily = pixelFontFamily();
+
+    // Make sure custom fonts (DotGothic16) are loaded before any text draw —
+    // canvas falls back to system-ui silently otherwise.
+    const hasText = stickers.some((s) => s.kind === "text");
+    if (hasText && typeof document !== "undefined" && document.fonts) {
+      try {
+        await document.fonts.load(`${textSize}px ${textFontFamily}`);
+      } catch {
+        // best-effort — fall through to fallback rendering
+      }
+    }
 
     for (const s of stickers) {
       const cx = (s.xPct / 100) * canvas.width;
@@ -103,18 +133,53 @@ export async function composeStickersOnto({
         ctx.scale(s.scale, s.scale);
         ctx.drawImage(img, -drawW / 2, -drawH / 2, drawW, drawH);
         ctx.restore();
-      } else {
+      } else if (s.kind === "emoji") {
         const emoji = EMOJI_STICKERS.find((e) => e.id === s.emojiId);
         if (!emoji) continue;
         ctx.save();
         ctx.translate(cx, cy);
         ctx.rotate(rad);
         ctx.scale(s.scale, s.scale);
+        if (emoji.iconSrc) {
+          // ZEP pixel-art icon — draw the preloaded PNG at emojiSize on the
+          // long edge, preserving aspect ratio. Keep image-smoothing off so
+          // pixel-art edges stay crisp.
+          const img = sourceImages.get(emoji.iconSrc);
+          if (img) {
+            const w0 = img.naturalWidth;
+            const h0 = img.naturalHeight;
+            const longest = Math.max(w0, h0);
+            const drawW = (emojiSize * w0) / longest;
+            const drawH = (emojiSize * h0) / longest;
+            ctx.drawImage(img, -drawW / 2, -drawH / 2, drawW, drawH);
+          }
+        } else if (emoji.emoji) {
+          ctx.imageSmoothingEnabled = true;
+          ctx.font = `${emojiSize}px "Apple Color Emoji", "Segoe UI Emoji", sans-serif`;
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+          ctx.fillText(emoji.emoji, 0, 0);
+          ctx.imageSmoothingEnabled = false;
+        }
+        ctx.restore();
+      } else {
+        // s.kind === "text": pixel-display font, chosen color, 1px dark
+        // halo stroke so light text stays legible on busy photos (matches
+        // the editor's textShadow effect).
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.rotate(rad);
+        ctx.scale(s.scale, s.scale);
         ctx.imageSmoothingEnabled = true;
-        ctx.font = `${emojiSize}px "Apple Color Emoji", "Segoe UI Emoji", sans-serif`;
+        ctx.font = `${textSize}px ${textFontFamily}`;
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
-        ctx.fillText(emoji.emoji, 0, 0);
+        ctx.lineJoin = "round";
+        ctx.lineWidth = Math.max(2, textSize * 0.08);
+        ctx.strokeStyle = "rgba(0, 0, 0, 0.45)";
+        ctx.strokeText(s.text, 0, 0);
+        ctx.fillStyle = s.color;
+        ctx.fillText(s.text, 0, 0);
         ctx.imageSmoothingEnabled = false;
         ctx.restore();
       }

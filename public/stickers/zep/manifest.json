@@ -1,0 +1,466 @@
+[
+  {
+    "slug": "zep-01",
+    "left": 32,
+    "top": 85,
+    "width": 59,
+    "height": 54,
+    "pixels": 1959
+  },
+  {
+    "slug": "zep-02",
+    "left": 104,
+    "top": 85,
+    "width": 59,
+    "height": 54,
+    "pixels": 1950
+  },
+  {
+    "slug": "zep-03",
+    "left": 177,
+    "top": 85,
+    "width": 59,
+    "height": 55,
+    "pixels": 1788
+  },
+  {
+    "slug": "zep-04",
+    "left": 270,
+    "top": 82,
+    "width": 78,
+    "height": 64,
+    "pixels": 3309
+  },
+  {
+    "slug": "zep-05",
+    "left": 363,
+    "top": 84,
+    "width": 79,
+    "height": 65,
+    "pixels": 3511
+  },
+  {
+    "slug": "zep-06",
+    "left": 469,
+    "top": 97,
+    "width": 109,
+    "height": 38,
+    "pixels": 2147
+  },
+  {
+    "slug": "zep-07",
+    "left": 590,
+    "top": 95,
+    "width": 119,
+    "height": 45,
+    "pixels": 3223
+  },
+  {
+    "slug": "zep-08",
+    "left": 728,
+    "top": 83,
+    "width": 77,
+    "height": 62,
+    "pixels": 3008
+  },
+  {
+    "slug": "zep-09",
+    "left": 826,
+    "top": 86,
+    "width": 44,
+    "height": 46,
+    "pixels": 1259
+  },
+  {
+    "slug": "zep-10",
+    "left": 886,
+    "top": 87,
+    "width": 44,
+    "height": 46,
+    "pixels": 1281
+  },
+  {
+    "slug": "zep-11",
+    "left": 32,
+    "top": 154,
+    "width": 60,
+    "height": 54,
+    "pixels": 1938
+  },
+  {
+    "slug": "zep-12",
+    "left": 104,
+    "top": 154,
+    "width": 59,
+    "height": 54,
+    "pixels": 1926
+  },
+  {
+    "slug": "zep-13",
+    "left": 177,
+    "top": 155,
+    "width": 59,
+    "height": 54,
+    "pixels": 1891
+  },
+  {
+    "slug": "zep-14",
+    "left": 269,
+    "top": 155,
+    "width": 77,
+    "height": 62,
+    "pixels": 3138
+  },
+  {
+    "slug": "zep-15",
+    "left": 356,
+    "top": 155,
+    "width": 77,
+    "height": 62,
+    "pixels": 3072
+  },
+  {
+    "slug": "zep-16",
+    "left": 494,
+    "top": 155,
+    "width": 110,
+    "height": 120,
+    "pixels": 5610
+  },
+  {
+    "slug": "zep-17",
+    "left": 610,
+    "top": 161,
+    "width": 104,
+    "height": 114,
+    "pixels": 5503
+  },
+  {
+    "slug": "zep-18",
+    "left": 728,
+    "top": 170,
+    "width": 93,
+    "height": 93,
+    "pixels": 6355
+  },
+  {
+    "slug": "zep-19",
+    "left": 833,
+    "top": 145,
+    "width": 163,
+    "height": 123,
+    "pixels": 9459
+  },
+  {
+    "slug": "zep-20",
+    "left": 32,
+    "top": 223,
+    "width": 60,
+    "height": 54,
+    "pixels": 1824
+  },
+  {
+    "slug": "zep-21",
+    "left": 105,
+    "top": 247,
+    "width": 27,
+    "height": 27,
+    "pixels": 77
+  },
+  {
+    "slug": "zep-22",
+    "left": 108,
+    "top": 223,
+    "width": 54,
+    "height": 55,
+    "pixels": 1691
+  },
+  {
+    "slug": "zep-23",
+    "left": 176,
+    "top": 223,
+    "width": 60,
+    "height": 55,
+    "pixels": 1956
+  },
+  {
+    "slug": "zep-24",
+    "left": 261,
+    "top": 224,
+    "width": 77,
+    "height": 62,
+    "pixels": 3108
+  },
+  {
+    "slug": "zep-25",
+    "left": 345,
+    "top": 229,
+    "width": 114,
+    "height": 49,
+    "pixels": 3304
+  },
+  {
+    "slug": "zep-26",
+    "left": 28,
+    "top": 288,
+    "width": 101,
+    "height": 79,
+    "pixels": 4729
+  },
+  {
+    "slug": "zep-27",
+    "left": 142,
+    "top": 286,
+    "width": 109,
+    "height": 81,
+    "pixels": 4328
+  },
+  {
+    "slug": "zep-28",
+    "left": 276,
+    "top": 295,
+    "width": 70,
+    "height": 68,
+    "pixels": 2525
+  },
+  {
+    "slug": "zep-29",
+    "left": 361,
+    "top": 295,
+    "width": 71,
+    "height": 68,
+    "pixels": 2574
+  },
+  {
+    "slug": "zep-30",
+    "left": 443,
+    "top": 297,
+    "width": 63,
+    "height": 64,
+    "pixels": 2014
+  },
+  {
+    "slug": "zep-31",
+    "left": 541,
+    "top": 293,
+    "width": 44,
+    "height": 47,
+    "pixels": 749
+  },
+  {
+    "slug": "zep-32",
+    "left": 588,
+    "top": 306,
+    "width": 26,
+    "height": 29,
+    "pixels": 274
+  },
+  {
+    "slug": "zep-33",
+    "left": 654,
+    "top": 287,
+    "width": 80,
+    "height": 80,
+    "pixels": 3139
+  },
+  {
+    "slug": "zep-34",
+    "left": 618,
+    "top": 318,
+    "width": 39,
+    "height": 40,
+    "pixels": 536
+  },
+  {
+    "slug": "zep-35",
+    "left": 757,
+    "top": 289,
+    "width": 79,
+    "height": 78,
+    "pixels": 3312
+  },
+  {
+    "slug": "zep-36",
+    "left": 844,
+    "top": 288,
+    "width": 79,
+    "height": 79,
+    "pixels": 3399
+  },
+  {
+    "slug": "zep-37",
+    "left": 928,
+    "top": 295,
+    "width": 38,
+    "height": 36,
+    "pixels": 720
+  },
+  {
+    "slug": "zep-38",
+    "left": 535,
+    "top": 337,
+    "width": 24,
+    "height": 26,
+    "pixels": 288
+  },
+  {
+    "slug": "zep-39",
+    "left": 948,
+    "top": 323,
+    "width": 45,
+    "height": 45,
+    "pixels": 1108
+  },
+  {
+    "slug": "zep-40",
+    "left": 31,
+    "top": 377,
+    "width": 94,
+    "height": 79,
+    "pixels": 4953
+  },
+  {
+    "slug": "zep-41",
+    "left": 139,
+    "top": 382,
+    "width": 123,
+    "height": 66,
+    "pixels": 4542
+  },
+  {
+    "slug": "zep-42",
+    "left": 277,
+    "top": 377,
+    "width": 38,
+    "height": 46,
+    "pixels": 1055
+  },
+  {
+    "slug": "zep-43",
+    "left": 313,
+    "top": 377,
+    "width": 53,
+    "height": 73,
+    "pixels": 1931
+  },
+  {
+    "slug": "zep-44",
+    "left": 286,
+    "top": 411,
+    "width": 34,
+    "height": 39,
+    "pixels": 501
+  },
+  {
+    "slug": "zep-45",
+    "left": 393,
+    "top": 390,
+    "width": 108,
+    "height": 37,
+    "pixels": 2372
+  },
+  {
+    "slug": "zep-46",
+    "left": 518,
+    "top": 388,
+    "width": 114,
+    "height": 38,
+    "pixels": 2459
+  },
+  {
+    "slug": "zep-47",
+    "left": 645,
+    "top": 385,
+    "width": 118,
+    "height": 46,
+    "pixels": 3155
+  },
+  {
+    "slug": "zep-48",
+    "left": 774,
+    "top": 382,
+    "width": 92,
+    "height": 66,
+    "pixels": 4068
+  },
+  {
+    "slug": "zep-49",
+    "left": 920,
+    "top": 382,
+    "width": 74,
+    "height": 65,
+    "pixels": 3183
+  },
+  {
+    "slug": "zep-50",
+    "left": 387,
+    "top": 444,
+    "width": 119,
+    "height": 85,
+    "pixels": 5939
+  },
+  {
+    "slug": "zep-51",
+    "left": 515,
+    "top": 439,
+    "width": 122,
+    "height": 93,
+    "pixels": 6704
+  },
+  {
+    "slug": "zep-52",
+    "left": 645,
+    "top": 438,
+    "width": 115,
+    "height": 93,
+    "pixels": 5988
+  },
+  {
+    "slug": "zep-53",
+    "left": 30,
+    "top": 481,
+    "width": 100,
+    "height": 38,
+    "pixels": 2292
+  },
+  {
+    "slug": "zep-54",
+    "left": 142,
+    "top": 479,
+    "width": 118,
+    "height": 40,
+    "pixels": 3156
+  },
+  {
+    "slug": "zep-55",
+    "left": 268,
+    "top": 477,
+    "width": 110,
+    "height": 41,
+    "pixels": 1476
+  },
+  {
+    "slug": "zep-56",
+    "left": 774,
+    "top": 468,
+    "width": 92,
+    "height": 65,
+    "pixels": 4089
+  },
+  {
+    "slug": "zep-57",
+    "left": 870,
+    "top": 478,
+    "width": 50,
+    "height": 39,
+    "pixels": 1180
+  },
+  {
+    "slug": "zep-58",
+    "left": 936,
+    "top": 478,
+    "width": 67,
+    "height": 60,
+    "pixels": 1601
+  }
+]

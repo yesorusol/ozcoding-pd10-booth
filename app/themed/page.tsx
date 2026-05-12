@@ -27,7 +27,7 @@ function IdleScreen() {
     <div className="flex h-full flex-col gap-3 text-cabinet-frame sm:gap-4">
       <section
         data-testid="screen-headline"
-        className="rounded-sm border border-cabinet-frame bg-marquee-yellow px-3 py-2.5 text-center shadow-soft sm:py-3"
+        className="rounded-sm border border-cabinet-frame bg-bubble-grad px-3 py-2.5 text-center shadow-soft sm:py-3"
       >
         <p className="font-marquee text-base text-cabinet-frame sm:text-xl md:text-2xl">
           {COPY.idle.headlineKr}

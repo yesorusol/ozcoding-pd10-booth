@@ -16,7 +16,7 @@
  *
  * The selected row uses `bg-btn-yellow` to rhyme with the 시작 pill below it
  * — visually communicating "this row matches the action button." The
- * unselected row uses `bg-crt-cream`. The banner above stays `bg-marquee-yellow`.
+ * unselected row uses `bg-crt-cream`. The banner above uses `bg-bubble-grad`.
  * Three distinct fill tokens prevent the dual-yellow collision flagged in v1.
  *
  * Semantics: the row container is an ARIA radiogroup; each row is a radio
@@ -74,7 +74,7 @@ export function ModeSelect() {
     >
       <section
         data-testid="mode-select-headline"
-        className="rounded-sm border border-cabinet-frame bg-marquee-yellow px-3 py-2.5 text-center shadow-soft sm:py-3"
+        className="rounded-sm border border-cabinet-frame bg-bubble-grad px-3 py-2.5 text-center shadow-soft sm:py-3"
       >
         <p className="font-marquee text-base text-cabinet-frame sm:text-xl md:text-2xl">
           {COPY.modeSelect.headlineKr}

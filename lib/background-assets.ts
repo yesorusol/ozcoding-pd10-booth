@@ -68,7 +68,7 @@ export const BACKGROUND_PATTERNS: ReadonlyArray<BackgroundPattern> = [
 export const BACKGROUND_PATTERNS_PAGE_SIZE = 6;
 
 export const BACKGROUND_COLORS: ReadonlyArray<BackgroundColor> = [
-  { id: "cream", hex: "#fff5e6", label: "크림" },
+  { id: "white", hex: "#ffffff", label: "화이트" },
   { id: "blush", hex: "#ffd8e6", label: "블러시" },
   { id: "butter", hex: "#fff36b", label: "버터" },
   { id: "mint", hex: "#d4f5e8", label: "민트" },

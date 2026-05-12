@@ -241,18 +241,19 @@ function paintTitleCell(
   ctx.textBaseline = "middle";
   ctx.textAlign = "center";
 
-  // Korean headline — outlined navy + white halo (auto-inverted on dark
-  // bg). Sits in the upper portion of cell 7.
+  // Korean headline — vertically centered in the cell, outlined navy +
+  // white halo (auto-inverted on dark bg).
+  const cy = y + h / 2;
   ctx.font = `50px ${pixelFamily}`;
-  drawOutlinedText(ctx, HEADLINE_KR, cx, y + 180, {
+  drawOutlinedText(ctx, HEADLINE_KR, cx, cy - 20, {
     fill,
     stroke,
     strokeWidth: 9,
   });
 
-  // English subline directly below.
+  // English subline directly below the KR headline.
   ctx.font = `20px ${pixelFamily}`;
-  drawOutlinedText(ctx, HEADLINE_EN, cx, y + 225, {
+  drawOutlinedText(ctx, HEADLINE_EN, cx, cy + 25, {
     fill,
     stroke,
     strokeWidth: 5,

@@ -681,9 +681,21 @@ export function StickerEditor({
                       type="button"
                       onClick={() => addEmoji(emoji)}
                       aria-label={`${emoji.label} 스티커 추가`}
-                      className="flex aspect-square items-center justify-center rounded border border-cabinet-frame/40 bg-white text-2xl transition active:scale-95"
+                      className="flex aspect-square items-center justify-center rounded border border-cabinet-frame/40 bg-white p-1 text-2xl transition active:scale-95"
                     >
-                      {emoji.emoji}
+                      {emoji.iconSrc ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={emoji.iconSrc}
+                          alt=""
+                          aria-hidden
+                          draggable={false}
+                          className="h-full w-full object-contain"
+                          style={{ imageRendering: "pixelated" }}
+                        />
+                      ) : (
+                        <span aria-hidden>{emoji.emoji}</span>
+                      )}
                     </button>
                   ))}
                 </div>

@@ -43,35 +43,36 @@ export type EmojiSticker = {
   iconSrc?: string;
 };
 
+const PIXEL_DIR = "/stickers/pixel";
+
 /**
- * Basic Unicode emoji palette. Rendered as text in the picker + composer.
- * 24 entries → 2 pages of 12 in the picker (paginated via arrows).
+ * Pixel-art emoji palette extracted from the Gemini sticker sheet via
+ * `scripts/split-pixel-emoji.mjs`. 18 transparent PNGs under
+ * `/public/stickers/pixel/` — composer + picker render `iconSrc` as a
+ * crisp pixelated `<img>` rather than the Unicode glyph.
+ *
+ * The source sheet had two duplicate sparkle-stars; only one is kept
+ * (emoji-06). 18 entries → 2 pages of 12 in the paginated picker.
  */
 export const EMOJI_STICKERS: ReadonlyArray<EmojiSticker> = [
-  { id: "em-heart-pink", emoji: "💖", label: "핫핑크 하트" },
-  { id: "em-heart-red", emoji: "❤️", label: "빨강 하트" },
-  { id: "em-heart-pulse", emoji: "💗", label: "분홍 하트" },
-  { id: "em-heart-baby", emoji: "🩷", label: "베이비핑크 하트" },
-  { id: "em-star", emoji: "⭐", label: "별" },
-  { id: "em-star-glow", emoji: "🌟", label: "빛나는 별" },
-  { id: "em-sparkle", emoji: "✨", label: "반짝임" },
-  { id: "em-dizzy", emoji: "💫", label: "회오리 별" },
-  { id: "em-rainbow", emoji: "🌈", label: "무지개" },
-  { id: "em-fire", emoji: "🔥", label: "불꽃" },
-  { id: "em-crown", emoji: "👑", label: "왕관" },
-  { id: "em-ribbon", emoji: "🎀", label: "리본" },
-  { id: "em-sunglasses", emoji: "🕶️", label: "선글라스" },
-  { id: "em-glasses", emoji: "👓", label: "안경" },
-  { id: "em-speech", emoji: "💬", label: "말풍선" },
-  { id: "em-squirrel", emoji: "🐿️", label: "다람쥐" },
-  { id: "em-baseball", emoji: "⚾", label: "야구공" },
-  { id: "em-hammer", emoji: "🔨", label: "망치" },
-  { id: "em-trophy", emoji: "🏆", label: "트로피" },
-  { id: "em-cherry-blossom", emoji: "🌸", label: "벚꽃" },
-  { id: "em-camera", emoji: "📸", label: "카메라" },
-  { id: "em-party", emoji: "🎉", label: "파티" },
-  { id: "em-confetti", emoji: "🎊", label: "꽃가루" },
-  { id: "em-hibiscus", emoji: "🌺", label: "히비스커스" },
+  { id: "em-finger-point", iconSrc: `${PIXEL_DIR}/emoji-01.png`, label: "가리키는 손" },
+  { id: "em-marble", iconSrc: `${PIXEL_DIR}/emoji-02.png`, label: "파란 구슬" },
+  { id: "em-baseball", iconSrc: `${PIXEL_DIR}/emoji-03.png`, label: "야구공" },
+  { id: "em-heart", iconSrc: `${PIXEL_DIR}/emoji-04.png`, label: "하트" },
+  { id: "em-comet", iconSrc: `${PIXEL_DIR}/emoji-05.png`, label: "혜성" },
+  { id: "em-star", iconSrc: `${PIXEL_DIR}/emoji-06.png`, label: "반짝이는 별" },
+  { id: "em-paw", iconSrc: `${PIXEL_DIR}/emoji-08.png`, label: "발바닥" },
+  { id: "em-bubble", iconSrc: `${PIXEL_DIR}/emoji-09.png`, label: "비눗방울" },
+  { id: "em-cursor", iconSrc: `${PIXEL_DIR}/emoji-10.png`, label: "커서" },
+  { id: "em-key", iconSrc: `${PIXEL_DIR}/emoji-11.png`, label: "열쇠" },
+  { id: "em-boot", iconSrc: `${PIXEL_DIR}/emoji-12.png`, label: "장화" },
+  { id: "em-trumpet", iconSrc: `${PIXEL_DIR}/emoji-13.png`, label: "트럼펫" },
+  { id: "em-ghost", iconSrc: `${PIXEL_DIR}/emoji-14.png`, label: "유령" },
+  { id: "em-sparkle", iconSrc: `${PIXEL_DIR}/emoji-15.png`, label: "반짝이" },
+  { id: "em-squirrel", iconSrc: `${PIXEL_DIR}/emoji-16.png`, label: "날다람쥐" },
+  { id: "em-chameleon", iconSrc: `${PIXEL_DIR}/emoji-17.png`, label: "카멜레온" },
+  { id: "em-watering-can", iconSrc: `${PIXEL_DIR}/emoji-18.png`, label: "물뿌리개" },
+  { id: "em-hammer", iconSrc: `${PIXEL_DIR}/emoji-19.png`, label: "망치" },
 ];
 
 /** Discriminated union for placed sticker instances on the photo. */

@@ -171,21 +171,21 @@ describe("composeSheet", () => {
     expect(ctxStub.strokeText).toHaveBeenCalled();
   });
 
-  it("draws each cut at its frame's grid cell position", async () => {
+  it("draws each cut contained inside its grid cell (no crop)", async () => {
     const cuts = makeCuts();
     await composeSheet({ cuts });
     const drawCalls = (ctxStub.drawImage as unknown as ReturnType<typeof vi.fn>)
       .mock.calls;
     for (let i = 0; i < CAPTURE_FRAMES.length; i++) {
       const frame = CAPTURE_FRAMES[i];
-      const expected = cellRect(frame.gridIndex);
+      const cell = cellRect(frame.gridIndex);
       const args = drawCalls[i];
-      // ctx.drawImage(img, sx, sy, sw, sh, dx, dy, dw, dh) — 9-arg form
-      // for cuts (we cover-crop into the slightly wider cell).
-      expect(args[5]).toBe(expected.x);
-      expect(args[6]).toBe(expected.y);
-      expect(args[7]).toBe(SHEET_CELL_W);
-      expect(args[8]).toBe(SHEET_CELL_H);
+      // ctx.drawImage(img, dx, dy, dw, dh) — 5-arg form. Cut is contain-
+      // fit and centered, so its rect must sit entirely inside the cell.
+      expect(args[1]).toBeGreaterThanOrEqual(cell.x);
+      expect(args[2]).toBeGreaterThanOrEqual(cell.y);
+      expect(args[1] + args[3]).toBeLessThanOrEqual(cell.x + SHEET_CELL_W);
+      expect(args[2] + args[4]).toBeLessThanOrEqual(cell.y + SHEET_CELL_H);
     }
   });
 

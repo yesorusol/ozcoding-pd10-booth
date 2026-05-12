@@ -153,25 +153,24 @@ export async function composeSheet(
   await ensurePixelFontReady();
 
   // 2. Cuts at cells 0..6 — cell aspect (~0.89) is slightly wider than the
-  //    cut canvas (0.8), so use coverCrop to trim a small top/bottom slice
-  //    while filling the cell uniformly.
+  //    cut canvas (0.8). Use contain-fit (not cover-crop) so the full
+  //    character frame stays visible — hats, hands, and bottom captions
+  //    don't get trimmed. The ~25px gap on each side of every cut shows
+  //    the sheet bg, which reads as part of the window-grid surround.
   for (const frame of CAPTURE_FRAMES) {
     const cut = cuts.find((c) => c.frameId === frame.id);
     if (!cut || !cut.imageBitmap) continue;
     const { x, y } = cellRect(frame.gridIndex);
     const bmp = cut.imageBitmap;
-    const c = coverCrop(bmp.width, bmp.height, SHEET_CELL_W, SHEET_CELL_H);
-    ctx.drawImage(
-      bmp,
-      c.sx,
-      c.sy,
-      c.sw,
-      c.sh,
-      x,
-      y,
-      SHEET_CELL_W,
-      SHEET_CELL_H,
+    const scale = Math.min(
+      SHEET_CELL_W / bmp.width,
+      SHEET_CELL_H / bmp.height,
     );
+    const dw = bmp.width * scale;
+    const dh = bmp.height * scale;
+    const dx = x + (SHEET_CELL_W - dw) / 2;
+    const dy = y + (SHEET_CELL_H - dh) / 2;
+    ctx.drawImage(bmp, dx, dy, dw, dh);
   }
 
   // 3. Cell 7 — title cell. The chosen bg bleeds through the cell; we

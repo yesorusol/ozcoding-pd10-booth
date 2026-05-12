@@ -419,7 +419,7 @@ export function StickerEditor({
         data-testid="sticker-panel"
         className="flex w-full shrink-0 flex-col border-t-2 border-cabinet-frame bg-white/80 md:h-full md:w-80 md:border-l-2 md:border-t-0"
       >
-        <header className="border-b border-cabinet-frame/30 bg-marquee-yellow px-4 py-2">
+        <header className="border-b border-cabinet-frame/30 bg-bubble-grad px-4 py-2">
           <p className="font-marquee text-lg text-cabinet-frame">사진 꾸미기</p>
           <p className="font-body text-xs text-cabinet-frame/70">선택해서 사진에 붙여요</p>
         </header>
@@ -520,12 +520,12 @@ export function StickerEditor({
                 );
               })()}
 
-              <p className="mb-2 font-body text-xs font-bold text-cabinet-frame">
+              <p className="mb-3 mt-5 font-body text-xs font-bold text-cabinet-frame">
                 배경 색상
               </p>
               <div
                 data-testid="background-color-grid"
-                className="mb-4 grid grid-cols-4 gap-2"
+                className="mb-6 grid grid-cols-4 gap-2"
               >
                 {BACKGROUND_COLORS.map((c) => {
                   const isSelected =
@@ -552,10 +552,10 @@ export function StickerEditor({
             </>
           ) : null}
 
-          <p className="mb-2 font-body text-xs font-bold text-cabinet-frame">
+          <p className="mb-3 mt-2 font-body text-xs font-bold text-cabinet-frame">
             텍스트
           </p>
-          <div className="mb-3">
+          <div className="mb-6">
             <input
               type="text"
               value={textDraft}
@@ -601,7 +601,7 @@ export function StickerEditor({
               data-testid="text-sticker-add"
               className="mt-2 w-full rounded-full border border-cabinet-frame bg-btn-yellow py-2 font-marquee text-base text-cabinet-frame shadow-soft transition active:translate-y-px disabled:cursor-not-allowed disabled:opacity-50"
             >
-              텍스트 추가
+              텍스트 추가하기
             </button>
           </div>
 
@@ -638,7 +638,7 @@ export function StickerEditor({
             );
             return (
               <>
-                <div className="mb-2 flex items-center justify-between">
+                <div className="mb-3 mt-2 flex items-center justify-between">
                   <p className="font-body text-xs font-bold text-cabinet-frame">
                     이모지
                   </p>

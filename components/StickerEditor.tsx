@@ -420,8 +420,8 @@ export function StickerEditor({
         className="flex w-full shrink-0 flex-col border-t-2 border-cabinet-frame bg-white/80 md:h-full md:w-80 md:border-l-2 md:border-t-0"
       >
         <header className="border-b border-cabinet-frame/30 bg-marquee-yellow px-4 py-2">
-          <p className="font-marquee text-lg text-cabinet-frame">스티커 고르기</p>
-          <p className="font-body text-xs text-cabinet-frame/70">탭해서 사진에 붙여요</p>
+          <p className="font-marquee text-lg text-cabinet-frame">사진 꾸미기</p>
+          <p className="font-body text-xs text-cabinet-frame/70">선택해서 사진에 붙여요</p>
         </header>
 
         <div className="flex-1 overflow-y-auto p-3">
@@ -605,31 +605,34 @@ export function StickerEditor({
             </button>
           </div>
 
-          <p className="mb-2 font-body text-xs font-bold text-cabinet-frame">
-            캐릭터
-          </p>
-          <div className="mb-3 grid grid-cols-4 gap-2">
-            {CHARACTER_STICKERS.map((asset) => (
-              <button
-                key={asset.id}
-                type="button"
-                onClick={() => addCharacter(asset)}
-                aria-label={`${asset.label} 스티커 추가`}
-                className="flex aspect-square items-center justify-center overflow-hidden rounded border border-cabinet-frame/40 bg-white p-0.5 transition active:scale-95"
-              >
-                <CharacterThumb asset={asset} />
-              </button>
-            ))}
-          </div>
-
           {(() => {
+            // Merge character stickers and emoji stickers into one paginated
+            // grid labeled "이모지". Characters render via CharacterThumb;
+            // emoji entries fall through to the iconSrc / glyph branch.
+            type MergedItem =
+              | { kind: "char"; id: string; label: string; asset: (typeof CHARACTER_STICKERS)[number] }
+              | { kind: "emoji"; id: string; label: string; emoji: (typeof EMOJI_STICKERS)[number] };
+            const merged: ReadonlyArray<MergedItem> = [
+              ...CHARACTER_STICKERS.map((a) => ({
+                kind: "char" as const,
+                id: a.id,
+                label: a.label,
+                asset: a,
+              })),
+              ...EMOJI_STICKERS.map((e) => ({
+                kind: "emoji" as const,
+                id: e.id,
+                label: e.label,
+                emoji: e,
+              })),
+            ];
             const totalEmojiPages = Math.max(
               1,
-              Math.ceil(EMOJI_STICKERS.length / EMOJI_PAGE_SIZE)
+              Math.ceil(merged.length / EMOJI_PAGE_SIZE)
             );
             const clampedPage = Math.min(emojiPage, totalEmojiPages - 1);
             const pageStart = clampedPage * EMOJI_PAGE_SIZE;
-            const pageEmojis = EMOJI_STICKERS.slice(
+            const pageItems = merged.slice(
               pageStart,
               pageStart + EMOJI_PAGE_SIZE
             );
@@ -675,29 +678,41 @@ export function StickerEditor({
                   data-testid="emoji-grid"
                   className="grid grid-cols-4 gap-2"
                 >
-                  {pageEmojis.map((emoji) => (
-                    <button
-                      key={emoji.id}
-                      type="button"
-                      onClick={() => addEmoji(emoji)}
-                      aria-label={`${emoji.label} 스티커 추가`}
-                      className="flex aspect-square items-center justify-center rounded border border-cabinet-frame/40 bg-white p-1 text-2xl transition active:scale-95"
-                    >
-                      {emoji.iconSrc ? (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img
-                          src={emoji.iconSrc}
-                          alt=""
-                          aria-hidden
-                          draggable={false}
-                          className="h-full w-full object-contain"
-                          style={{ imageRendering: "pixelated" }}
-                        />
-                      ) : (
-                        <span aria-hidden>{emoji.emoji}</span>
-                      )}
-                    </button>
-                  ))}
+                  {pageItems.map((item) =>
+                    item.kind === "char" ? (
+                      <button
+                        key={item.id}
+                        type="button"
+                        onClick={() => addCharacter(item.asset)}
+                        aria-label={`${item.label} 스티커 추가`}
+                        className="flex aspect-square items-center justify-center overflow-hidden rounded border border-cabinet-frame/40 bg-white p-0.5 transition active:scale-95"
+                      >
+                        <CharacterThumb asset={item.asset} />
+                      </button>
+                    ) : (
+                      <button
+                        key={item.id}
+                        type="button"
+                        onClick={() => addEmoji(item.emoji)}
+                        aria-label={`${item.label} 스티커 추가`}
+                        className="flex aspect-square items-center justify-center rounded border border-cabinet-frame/40 bg-white p-1 text-2xl transition active:scale-95"
+                      >
+                        {item.emoji.iconSrc ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img
+                            src={item.emoji.iconSrc}
+                            alt=""
+                            aria-hidden
+                            draggable={false}
+                            className="h-full w-full object-contain"
+                            style={{ imageRendering: "pixelated" }}
+                          />
+                        ) : (
+                          <span aria-hidden>{item.emoji.emoji}</span>
+                        )}
+                      </button>
+                    )
+                  )}
                 </div>
               </>
             );

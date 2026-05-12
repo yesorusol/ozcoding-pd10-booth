@@ -2,33 +2,31 @@
  * lib/sheet-composer.ts — M5 sheet composition (challenge / 7-cut mode).
  *
  * Single-background layout: the user-chosen `BackgroundChoice` fills the
- * entire 1080×2400 sheet. The 7 captured cuts cover cells 0..6, so the
+ * entire 1940×1210 sheet. The 7 captured cuts cover cells 0..6, so the
  * background only shows through as the outer frame, inter-cell gutters,
- * and cell 7 (bottom-right title cell). The frame and cell 7 therefore
- * read as one continuous surface — picking a light cream gives a clean
- * window-grid look; any solid color wraps around all 7 photos.
+ * and cell 7 (bottom-right title cell). Frame + cell 7 + gutters all
+ * read as one continuous surface — black default gives the reference
+ * "window grid" look; any solid color wraps around all 7 photos.
  *
- * Cell 7 is hand-painted (no PNG): a pink chip with the Korean headline
- * sits on top of the bleeding-through background, with English subline
- * and dated footer text underneath, all in the same pixel font + outline
- * treatment that normal-mode (4-cut) uses (navy fill + white halo).
+ * Cell 7 is hand-painted (no PNG): the Korean headline + English subline
+ * + dated footer sit on the bleeding-through bg, in the same pixel font
+ * + outline treatment that normal-mode (4-cut) uses (auto-flipped to
+ * white-on-navy when the bg is dark).
  *
  * Layout math (verified to fit exactly):
- *   width  = 2 × margin + 2 × cellW + 1 × gutter
- *          = 2×20 + 2×510 + 1×20 = 1080 ✓
- *   height = 2 × margin + 4 × cellH + 3 × gutter
- *          = 2×20 + 4×575 + 3×20 = 2400 ✓
+ *   width  = 2 × margin + 4 × cellW + 3 × gutter
+ *          = 2×20 + 4×460 + 3×20 = 1940 ✓
+ *   height = 2 × margin + 2 × cellH + 1 × gutter
+ *          = 2×20 + 2×575 + 1×20 = 1210 ✓
  *
- * Cell aspect (510:575 = 0.887) is slightly wider than the cut canvas
- * (576:720 = 0.800), so cuts are drawn with `coverCrop` — a small
- * top/bottom slice is trimmed. The character frames are designed with
- * padding, so the trim is visually safe.
+ * Cell aspect (460:575 = 0.800) matches the cut canvas (576:720 = 0.800)
+ * exactly, so cuts scale uniformly with no crop and no letterboxing —
+ * all mullions (outer + inter-cell) read at the uniform 20px gutter
+ * thickness.
  *
- * Grid index → cell:
- *   0 1
- *   2 3
- *   4 5
- *   6 7   ← gridIndex 7 = title cell (hand-painted)
+ * Grid index → cell (row-major 4 cols × 2 rows):
+ *   0 1 2 3
+ *   4 5 6 7   ← gridIndex 7 = title cell (hand-painted), bottom-right
  */
 
 import type { Cut } from "./types";
@@ -41,27 +39,26 @@ import {
   type BackgroundChoice,
 } from "./background-assets";
 
-export const SHEET_WIDTH = 1080;
-export const SHEET_HEIGHT = 2400;
-export const SHEET_CELL_W = 510;
+export const SHEET_WIDTH = 1940;
+export const SHEET_HEIGHT = 1210;
+export const SHEET_CELL_W = 460;
 export const SHEET_CELL_H = 575;
 export const SHEET_MARGIN_X = 20;
 export const SHEET_MARGIN_Y = 20;
 export const SHEET_GUTTER = 20;
-export const SHEET_COLS = 2;
-export const SHEET_ROWS = 4;
+export const SHEET_COLS = 4;
+export const SHEET_ROWS = 2;
 export const SHEET_TOTAL_CELLS = SHEET_COLS * SHEET_ROWS;
 
 /**
- * Default background for the challenge sheet. Navy by default so the
- * sheet pops against the cream booth chrome — without this the sheet
- * blends into the surrounding cabinet UI and the window-grid effect
- * gets lost. Headline text auto-switches to white-on-navy when the bg
- * is dark; user can swap to any color via the sticker editor palette.
+ * Default background for the challenge sheet. Pure black gives the
+ * strongest reference "window frame" contrast against the cream booth
+ * chrome — the cells read as photos punched out of a black grid.
+ * Headline text auto-switches to white-on-dark via `isBgDark`.
  */
 export const DEFAULT_SHEET_BACKGROUND: BackgroundChoice = {
   kind: "color",
-  colorId: "navy",
+  colorId: "black",
 };
 
 /** Brand strings — kept identical to overlay-composer (normal mode) so
@@ -244,30 +241,29 @@ function paintTitleCell(
   ctx.textBaseline = "middle";
   ctx.textAlign = "center";
 
-  // Korean headline — sized up to fill the cell. Same outlined treatment
-  // as the normal-mode `paintHeader` (overlay-composer), inverted on
-  // dark bgs so navy default still reads.
-  ctx.font = `56px ${pixelFamily}`;
+  // Korean headline — outlined navy + white halo (auto-inverted on dark
+  // bg). Sits in the upper portion of cell 7.
+  ctx.font = `50px ${pixelFamily}`;
   drawOutlinedText(ctx, HEADLINE_KR, cx, y + 180, {
     fill,
     stroke,
-    strokeWidth: 10,
+    strokeWidth: 9,
   });
 
   // English subline directly below.
-  ctx.font = `24px ${pixelFamily}`;
-  drawOutlinedText(ctx, HEADLINE_EN, cx, y + 230, {
+  ctx.font = `20px ${pixelFamily}`;
+  drawOutlinedText(ctx, HEADLINE_EN, cx, y + 225, {
     fill,
     stroke,
-    strokeWidth: 6,
+    strokeWidth: 5,
   });
 
-  // Dated footer near the cell bottom — mirrors the normal-mode footer.
-  ctx.font = `26px ${pixelFamily}`;
-  drawOutlinedText(ctx, FOOTER_TEXT, cx, y + h - 55, {
+  // Dated footer near the cell bottom — sized to fit cell width.
+  ctx.font = `20px ${pixelFamily}`;
+  drawOutlinedText(ctx, FOOTER_TEXT, cx, y + h - 50, {
     fill,
     stroke,
-    strokeWidth: 6,
+    strokeWidth: 5,
   });
   ctx.restore();
 }

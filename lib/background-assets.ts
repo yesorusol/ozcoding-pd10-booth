@@ -75,6 +75,7 @@ export const BACKGROUND_COLORS: ReadonlyArray<BackgroundColor> = [
   { id: "sky", hex: "#cfe8ff", label: "스카이" },
   { id: "lavender", hex: "#e8e0ff", label: "라벤더" },
   { id: "navy", hex: "#1d2c4a", label: "네이비" },
+  { id: "black", hex: "#000000", label: "블랙" },
   { id: "white", hex: "#ffffff", label: "화이트" },
 ];
 

@@ -51,8 +51,8 @@ describe("cellRect (sheet grid math)", () => {
     });
   });
 
-  it("places cell 2 below cell 0", () => {
-    expect(cellRect(2)).toEqual({
+  it("places cell 4 below cell 0 (first cell of row 2)", () => {
+    expect(cellRect(4)).toEqual({
       x: SHEET_MARGIN_X,
       y: SHEET_MARGIN_Y + SHEET_CELL_H + SHEET_GUTTER,
     });
@@ -60,14 +60,14 @@ describe("cellRect (sheet grid math)", () => {
 
   it("places title-cell (index 7) at bottom-right", () => {
     expect(cellRect(7)).toEqual({
-      x: SHEET_MARGIN_X + SHEET_CELL_W + SHEET_GUTTER,
-      y: SHEET_MARGIN_Y + 3 * (SHEET_CELL_H + SHEET_GUTTER),
+      x: SHEET_MARGIN_X + 3 * (SHEET_CELL_W + SHEET_GUTTER),
+      y: SHEET_MARGIN_Y + (SHEET_CELL_H + SHEET_GUTTER),
     });
   });
 
-  it("right edge of cell 1 = sheet width − marginX (exact fit)", () => {
-    const c1 = cellRect(1);
-    expect(c1.x + SHEET_CELL_W).toBe(SHEET_WIDTH - SHEET_MARGIN_X);
+  it("right edge of last col cell = sheet width − marginX (exact fit)", () => {
+    const c3 = cellRect(3);
+    expect(c3.x + SHEET_CELL_W).toBe(SHEET_WIDTH - SHEET_MARGIN_X);
   });
 
   it("bottom edge of cell 7 = sheet height − marginY (exact fit)", () => {
@@ -145,7 +145,7 @@ describe("composeSheet", () => {
     );
   });
 
-  it("creates a 1080×2400 canvas and fills the background", async () => {
+  it("creates a 1940×1210 canvas and fills the background", async () => {
     const blob = await composeSheet({ cuts: makeCuts() });
     expect(blob).toBeInstanceOf(Blob);
     expect(ctxStub.fillRect).toHaveBeenCalledWith(

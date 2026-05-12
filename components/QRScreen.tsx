@@ -104,7 +104,7 @@ export function QRScreen({ publicUrl, sheetBlobUrl, onNext }: QRScreenProps) {
         type="button"
         onClick={onNext}
         data-testid="next-user-btn"
-        className="mt-1 rounded-full border-2 border-cabinet-frame bg-btn-yellow px-8 py-3 font-marquee text-2xl text-cabinet-frame shadow-soft transition active:translate-y-px"
+        className="mt-1 rounded-full border-2 border-cabinet-frame bg-btn-yellow px-10 py-3 font-marquee text-xl tracking-wide text-cabinet-frame shadow-soft transition active:translate-y-px"
       >
         {COPY.result.nextUserButton}
       </button>

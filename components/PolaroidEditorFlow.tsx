@@ -403,7 +403,7 @@ export function PolaroidEditorFlow() {
             <Link
               href="/themed"
               data-testid="challenge-funnel-button"
-              className="mx-auto flex items-center gap-2 rounded-full border-2 border-cabinet-frame bg-btn-blue px-8 py-3 font-marquee text-2xl text-white shadow-soft transition active:translate-y-px"
+              className="mx-auto flex items-center gap-2 rounded-full border-2 border-cabinet-frame bg-btn-blue px-10 py-3 font-marquee text-xl tracking-wide text-white shadow-soft transition active:translate-y-px"
             >
               <span>챌린지 사진 도전</span>
               <span aria-hidden>→</span>

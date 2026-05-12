@@ -89,8 +89,8 @@ export const COPY = {
     prepSub: "프레임에 맞춰 포즈를 잡아주세요",
     prepHint: "곧 5초 카운트다운이 시작돼요",
     /** 7컷 끝나고 시트 합성 단계 */
-    compositingHeadline: "합성 중...",
-    compositingSub: "잠시만 기다려주세요",
+    compositingHeadline: "잠시만 기다려 주세요",
+    compositingSub: "사진이 완성되고 있어요",
     /** 미리보기 컷 위에 살짝 비치는 한국어 한 줄 */
     previewBadge: "찰칵!",
   },

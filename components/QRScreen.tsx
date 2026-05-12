@@ -77,7 +77,7 @@ export function QRScreen({
       className="flex flex-col items-center gap-3 p-3 text-cabinet-frame"
     >
       <h2 className="font-marquee text-3xl">{COPY.result.headline}</h2>
-      <Bubble size="md">{subline}</Bubble>
+      <Bubble size="sm" className="mb-1">{subline}</Bubble>
 
       {step === "photo" ? (
         // Photo-first hero — full-size composed sheet, no QR yet.

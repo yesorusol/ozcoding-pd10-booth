@@ -60,7 +60,7 @@ function OnboardingScreen() {
         ))}
       </ol>
 
-      <div data-testid="onboarding-nav" className="mt-auto -mb-2 flex justify-center sm:-mb-3">
+      <div data-testid="onboarding-nav" className="mt-auto flex justify-center">
         <Link
           href="/booth?mode=normal"
           data-testid="onboarding-start"

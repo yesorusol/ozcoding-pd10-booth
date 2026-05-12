@@ -103,7 +103,7 @@ function CrtScreen({ children }: { children: ReactNode }) {
       <CrtBezel position="top" />
       <div
         data-testid="cabinet-screen-inner"
-        className="bg-scanlines bg-crt-cream flex min-h-[20rem] flex-col px-5 py-4 sm:min-h-[25rem] sm:px-6 sm:py-5 md:min-h-[26rem]"
+        className="bg-scanlines bg-crt-cream flex min-h-[17rem] flex-col px-5 py-4 sm:min-h-[20rem] sm:px-6 sm:py-5 md:min-h-[22rem]"
       >
         {children}
       </div>

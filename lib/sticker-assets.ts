@@ -26,7 +26,7 @@ export const CHARACTER_STICKERS: ReadonlyArray<StickerAsset> = [
   { id: "char-06", src: `${CHARS_DIR}/char-06.png`, label: "퍼플캡 - 보라모자 분홍자켓" },
   { id: "char-07", src: `${CHARS_DIR}/char-07.png`, label: "올빼미 - 짧은머리 선글라스" },
   { id: "char-08", src: `${CHARS_DIR}/char-08.png`, label: "플레임 - 주황 불꽃머리" },
-  { id: "char-09", src: `${CHARS_DIR}/char-09.png`, label: "탑낫 - 검은묶음머리 안경" },
+  { id: "char-09", src: `${CHARS_DIR}/char-09.png`, label: "갓-블루 - 검은갓 한복풍 파랑옷 안경" },
   { id: "char-10", src: `${CHARS_DIR}/char-10.png`, label: "갓-레드 - 한복풍 빨간옷" },
 ];
 

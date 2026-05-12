@@ -53,14 +53,15 @@ export const SHEET_ROWS = 4;
 export const SHEET_TOTAL_CELLS = SHEET_COLS * SHEET_ROWS;
 
 /**
- * Default background for the challenge sheet. Cream gives a clean light
- * frame so the headline text (navy fill + white halo, same treatment as
- * normal-mode) stays readable out of the box. Users can swap to any
- * other color via the sticker editor palette.
+ * Default background for the challenge sheet. Navy by default so the
+ * sheet pops against the cream booth chrome — without this the sheet
+ * blends into the surrounding cabinet UI and the window-grid effect
+ * gets lost. Headline text auto-switches to white-on-navy when the bg
+ * is dark; user can swap to any color via the sticker editor palette.
  */
 export const DEFAULT_SHEET_BACKGROUND: BackgroundChoice = {
   kind: "color",
-  colorId: "cream",
+  colorId: "navy",
 };
 
 /** Brand strings — kept identical to overlay-composer (normal mode) so
@@ -174,8 +175,9 @@ export async function composeSheet(
   }
 
   // 3. Cell 7 — title cell. The chosen bg bleeds through the cell; we
-  //    paint the pink "9기와 추억남기기" chip + sublines on top.
-  paintTitleCell(ctx);
+  //    paint the headline + sublines on top. Text colors flip with bg
+  //    darkness so the same treatment reads on navy or cream.
+  paintTitleCell(ctx, background);
 
   return new Promise<Blob>((resolve, reject) => {
     canvas.toBlob((blob) => {
@@ -226,43 +228,66 @@ async function paintBackground(
   }
 }
 
-function paintTitleCell(ctx: CanvasRenderingContext2D): void {
+function paintTitleCell(
+  ctx: CanvasRenderingContext2D,
+  bg: BackgroundChoice,
+): void {
   const { x, y } = cellRect(TITLE_FRAME.gridIndex);
   const w = SHEET_CELL_W;
   const h = SHEET_CELL_H;
   const cx = x + w / 2;
   const pixelFamily = getPixelFontFamily();
+  const dark = isBgDark(bg);
+  const fill = dark ? "#ffffff" : FRAME_NAVY;
+  const stroke = dark ? FRAME_NAVY : "#ffffff";
 
   ctx.save();
   ctx.textBaseline = "middle";
   ctx.textAlign = "center";
 
-  // Korean headline — outlined navy + white halo, same treatment as the
-  // normal-mode `paintHeader` (overlay-composer). Sits near the top of
-  // cell 7 like the normal-mode header band.
-  ctx.font = `38px ${pixelFamily}`;
-  drawOutlinedText(ctx, HEADLINE_KR, cx, y + 160, {
-    fill: FRAME_NAVY,
-    stroke: "#ffffff",
-    strokeWidth: 8,
+  // Korean headline — sized up to fill the cell. Same outlined treatment
+  // as the normal-mode `paintHeader` (overlay-composer), inverted on
+  // dark bgs so navy default still reads.
+  ctx.font = `56px ${pixelFamily}`;
+  drawOutlinedText(ctx, HEADLINE_KR, cx, y + 180, {
+    fill,
+    stroke,
+    strokeWidth: 10,
   });
 
-  // English subline directly below, same outline.
-  ctx.font = `18px ${pixelFamily}`;
-  drawOutlinedText(ctx, HEADLINE_EN, cx, y + 200, {
-    fill: FRAME_NAVY,
-    stroke: "#ffffff",
-    strokeWidth: 5,
+  // English subline directly below.
+  ctx.font = `24px ${pixelFamily}`;
+  drawOutlinedText(ctx, HEADLINE_EN, cx, y + 230, {
+    fill,
+    stroke,
+    strokeWidth: 6,
   });
 
   // Dated footer near the cell bottom — mirrors the normal-mode footer.
-  ctx.font = `22px ${pixelFamily}`;
+  ctx.font = `26px ${pixelFamily}`;
   drawOutlinedText(ctx, FOOTER_TEXT, cx, y + h - 55, {
-    fill: FRAME_NAVY,
-    stroke: "#ffffff",
+    fill,
+    stroke,
     strokeWidth: 6,
   });
   ctx.restore();
+}
+
+/**
+ * Treat the sheet bg as "dark" so we can flip text fill to white. Colors
+ * use BT.601 luminance; patterns assume light (most BACKGROUND_PATTERNS
+ * are pastel halftones).
+ */
+function isBgDark(bg: BackgroundChoice): boolean {
+  if (bg.kind !== "color") return false;
+  const color = findBackgroundColor(bg.colorId);
+  if (!color) return false;
+  const hex = color.hex.replace("#", "");
+  if (hex.length < 6) return false;
+  const r = parseInt(hex.slice(0, 2), 16);
+  const g = parseInt(hex.slice(2, 4), 16);
+  const b = parseInt(hex.slice(4, 6), 16);
+  return (r * 299 + g * 587 + b * 114) / 1000 < 140;
 }
 
 interface OutlinedTextOptions {

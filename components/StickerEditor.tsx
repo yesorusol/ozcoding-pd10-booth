@@ -447,7 +447,7 @@ export function StickerEditor({
           }}
         >
           <p className="font-marquee text-lg text-cabinet-frame">사진 꾸미기</p>
-          <p className="font-body text-xs text-cabinet-frame/70">선택해서 사진에 붙여요</p>
+          <p className="font-body text-xs text-cabinet-frame/70">선택해서 사진을 꾸며보세요</p>
         </header>
 
         <div className="flex-1 overflow-y-auto p-3">

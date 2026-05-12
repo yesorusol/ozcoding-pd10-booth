@@ -575,7 +575,7 @@ export function StickerEditor({
               placeholder="열쩡 구긔!!"
               maxLength={MAX_TEXT_LENGTH}
               data-testid="text-sticker-input"
-              className="w-full rounded border border-cabinet-frame/40 bg-white px-2 py-1 font-body text-sm text-cabinet-frame outline-none focus:ring-2 focus:ring-marquee-yellow"
+              className="w-full rounded border border-cabinet-frame/40 bg-white px-2 py-1 font-body text-sm text-cabinet-frame outline-none focus:border-cabinet-frame"
               style={{
                 fontFamily: "var(--font-pixel-display), system-ui, sans-serif",
               }}

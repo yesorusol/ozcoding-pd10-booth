@@ -57,9 +57,9 @@ export const FRAMES: ReadonlyArray<Frame> = [
   {
     id: "cosplay",
     src: "/frames/processed/cosplay.png",
-    label: "화목한 9기~",
-    labelEn: "Cohort 9 family!",
-    tagline: "화목한 9기~",
+    label: "프린세스 9기~",
+    labelEn: "Princess 9!",
+    tagline: "프린세스 9기~",
     gridIndex: 5,
   },
   {

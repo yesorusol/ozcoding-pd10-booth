@@ -81,53 +81,45 @@ export function QRScreen({
 
       {step === "photo" ? (
         // Photo-first hero — full-size composed sheet, no QR yet.
+        // Capped lower than the original since themed mode's 4-row × 2-col
+        // portrait sheet (aspect ~0.4) gets uncomfortably tall otherwise.
         publicUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={publicUrl}
             alt="합성된 시트 미리보기"
             data-testid="sheet-preview"
-            className="max-h-[420px] rounded-md border-2 border-cabinet-frame bg-white object-contain shadow-soft"
+            className="max-h-[340px] rounded-md border-2 border-cabinet-frame bg-white object-contain shadow-soft"
           />
         ) : null
       ) : (
-        // QR step — composed sheet shrunk to sit next to a small QR.
-        <div className="flex w-full items-center justify-center gap-4">
-          {publicUrl ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={publicUrl}
-              alt="합성된 시트 미리보기"
-              data-testid="sheet-preview"
-              className="max-h-[320px] min-w-0 flex-shrink rounded-md border-2 border-cabinet-frame bg-white object-contain shadow-soft"
-            />
-          ) : null}
-
-          <div className="flex flex-shrink-0 flex-col items-center gap-1.5">
-            <div className="rounded-md border-2 border-cabinet-frame bg-white p-1.5 shadow-soft">
-              {qrSrc ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={qrSrc}
-                  alt={`QR code for ${publicUrl}`}
-                  data-testid="qr-image"
-                  className="block h-[120px] w-[120px] sm:h-[140px] sm:w-[140px]"
-                />
-              ) : (
-                <div
-                  data-testid="qr-loading"
-                  className="flex h-[120px] w-[120px] animate-pulse items-center justify-center bg-gray-200 sm:h-[140px] sm:w-[140px]"
-                >
-                  <span className="font-pixel text-xs text-cabinet-frame/60">
-                    QR 생성 중...
-                  </span>
-                </div>
-              )}
-            </div>
-            <p className="text-center font-body text-[11px] leading-tight text-cabinet-frame/70">
-              폰 카메라로 스캔
-            </p>
+        // QR step — large standalone QR, no photo. Photo lives only on
+        // the photo step so the QR screen reads as a single, clear
+        // "scan me" affordance.
+        <div className="flex flex-col items-center gap-2">
+          <div className="rounded-md border-2 border-cabinet-frame bg-white p-3 shadow-soft">
+            {qrSrc ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={qrSrc}
+                alt={`QR code for ${publicUrl}`}
+                data-testid="qr-image"
+                className="block h-[240px] w-[240px] sm:h-[280px] sm:w-[280px]"
+              />
+            ) : (
+              <div
+                data-testid="qr-loading"
+                className="flex h-[240px] w-[240px] animate-pulse items-center justify-center bg-gray-200 sm:h-[280px] sm:w-[280px]"
+              >
+                <span className="font-pixel text-sm text-cabinet-frame/60">
+                  QR 생성 중...
+                </span>
+              </div>
+            )}
           </div>
+          <p className="text-center font-body text-xs text-cabinet-frame/70">
+            폰 카메라로 스캔
+          </p>
         </div>
       )}
 

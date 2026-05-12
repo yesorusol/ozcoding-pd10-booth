@@ -4,7 +4,8 @@
  *
  * Mirror policy: this hook manages the raw MediaStream only.
  * CSS transform: scaleX(-1) on the <video> element is applied by LiveOverlay.
- * captureCut in lib/capture.ts must NOT apply ctx.scale(-1, 1).
+ * captureCut in lib/capture.ts also mirrors the video draw so saved cuts
+ * match the on-screen preview.
  */
 
 import { useEffect, useRef, useState, useCallback } from "react";

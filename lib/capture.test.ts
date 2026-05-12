@@ -5,7 +5,9 @@
  * createImageBitmap, so the tests stub document.createElement('canvas'),
  * the 2D context's drawImage, and the global createImageBitmap. We then
  * assert that the right drawImage source rects (cover-fit) are used and
- * that the mirror policy (un-mirrored) is honored.
+ * that the mirror policy is honored: the video step wraps a
+ * translate+scale(-1,1) transform (matches the live preview), and the
+ * frame PNG is drawn unflipped at the same scope.
  */
 
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
@@ -45,12 +47,20 @@ function setupCanvasMock(getContextImpl: () => CanvasRenderingContext2D | null) 
 
 describe("captureCut", () => {
   let drawImage: ReturnType<typeof vi.fn>;
+  let save: ReturnType<typeof vi.fn>;
+  let restore: ReturnType<typeof vi.fn>;
+  let translate: ReturnType<typeof vi.fn>;
+  let scale: ReturnType<typeof vi.fn>;
   let originalCreateImageBitmap: typeof globalThis.createImageBitmap | undefined;
 
   beforeEach(() => {
     drawImage = vi.fn();
+    save = vi.fn();
+    restore = vi.fn();
+    translate = vi.fn();
+    scale = vi.fn();
     setupCanvasMock(
-      () => ({ drawImage }) as unknown as CanvasRenderingContext2D,
+      () => ({ drawImage, save, restore, translate, scale }) as unknown as CanvasRenderingContext2D,
     );
 
     originalCreateImageBitmap = globalThis.createImageBitmap;
@@ -89,15 +99,20 @@ describe("captureCut", () => {
     expect(drawImage.mock.calls[1][0]).toBe(frame);
   });
 
-  it("draws video un-mirrored — destination width/height are positive", async () => {
+  it("mirrors the video draw — translate+scale(-1,1) wraps the video drawImage and is undone before the frame draw", async () => {
     const video = makeMockVideo(1280, 720);
     const frame = makeMockFrame(800, 900);
     await captureCut({ video, frameImg: frame });
+    expect(save).toHaveBeenCalledOnce();
+    expect(translate).toHaveBeenCalledWith(CUT_WIDTH, 0);
+    expect(scale).toHaveBeenCalledWith(-1, 1);
+    expect(restore).toHaveBeenCalledOnce();
+    // Destination rect is still positive; the flip lives in the matrix.
     const args = drawImage.mock.calls[0];
-    expect(args[5]).toBe(0);          // dx
-    expect(args[6]).toBe(0);          // dy
-    expect(args[7]).toBe(CUT_WIDTH);  // dw — positive (no horizontal flip)
-    expect(args[8]).toBe(CUT_HEIGHT); // dh — positive
+    expect(args[5]).toBe(0);
+    expect(args[6]).toBe(0);
+    expect(args[7]).toBe(CUT_WIDTH);
+    expect(args[8]).toBe(CUT_HEIGHT);
   });
 
   it("uses cover-crop for video 1280×720 → 576×720 (centers horizontally)", async () => {
@@ -159,12 +174,20 @@ describe("captureCut", () => {
 
 describe("captureRawCut", () => {
   let drawImage: ReturnType<typeof vi.fn>;
+  let save: ReturnType<typeof vi.fn>;
+  let restore: ReturnType<typeof vi.fn>;
+  let translate: ReturnType<typeof vi.fn>;
+  let scale: ReturnType<typeof vi.fn>;
   let originalCreateImageBitmap: typeof globalThis.createImageBitmap | undefined;
 
   beforeEach(() => {
     drawImage = vi.fn();
+    save = vi.fn();
+    restore = vi.fn();
+    translate = vi.fn();
+    scale = vi.fn();
     setupCanvasMock(
-      () => ({ drawImage }) as unknown as CanvasRenderingContext2D,
+      () => ({ drawImage, save, restore, translate, scale }) as unknown as CanvasRenderingContext2D,
     );
 
     originalCreateImageBitmap = globalThis.createImageBitmap;

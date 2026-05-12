@@ -7,12 +7,15 @@
  * ImageBitmap that the sheet composer (M5) will draw into one of the 4×2
  * grid cells.
  *
- * Mirror policy (locked across M2 / M3 / M4):
+ * Mirror policy:
  *   • The LIVE preview is mirrored via CSS (`transform: scaleX(-1)`) on the
- *     <video> element only — selfie convention.
- *   • The captured cut is **un-mirrored** so text on shirts reads correctly.
- *     `captureCut` therefore does NOT call `ctx.scale(-1, 1)` and reads from
- *     `video.videoWidth × video.videoHeight` raw pixels.
+ *     <video> element — selfie convention.
+ *   • The captured cut **also mirrors the video** so the saved photo
+ *     matches what the user saw in the kiosk. Users complained that the
+ *     un-mirrored capture flipped their pose relative to the live preview,
+ *     which felt wrong at the booth. We apply `ctx.scale(-1, 1)` only
+ *     around the video draw — the frame PNG is drawn un-mirrored so any
+ *     text or asymmetric artwork on the frame still reads correctly.
  *
  * Cover-fit math (locked across M2 / M4):
  *   • The container in LiveOverlay uses `object-fit: cover` to fit the
@@ -45,8 +48,9 @@ export interface CaptureRawCutOptions {
 
 /**
  * Capture only the live video frame (no overlay) into a 576×720 RGBA
- * ImageBitmap, un-mirrored. Used by normal mode where the polaroid
- * overlay is composited later by `composeOverlaySheet`.
+ * ImageBitmap, mirrored to match the on-screen preview. Used by normal
+ * mode where the polaroid overlay is composited later by
+ * `composeOverlaySheet`.
  */
 export async function captureRawCut(
   options: CaptureRawCutOptions,
@@ -68,14 +72,20 @@ export async function captureRawCut(
       CUT_WIDTH,
       CUT_HEIGHT,
     );
+    ctx.save();
+    ctx.translate(CUT_WIDTH, 0);
+    ctx.scale(-1, 1);
     ctx.drawImage(video, v.sx, v.sy, v.sw, v.sh, 0, 0, CUT_WIDTH, CUT_HEIGHT);
+    ctx.restore();
   }
 
   return await createImageBitmap(canvas);
 }
 
 /**
- * Compose video + frame into a 576×720 RGBA ImageBitmap, un-mirrored.
+ * Compose video + frame into a 576×720 RGBA ImageBitmap. The video step
+ * is mirrored (matches the live preview); the frame PNG is drawn at
+ * normal orientation so its text/artwork stays correct.
  * Throws if a 2D rendering context can't be acquired.
  */
 export async function captureCut(
@@ -91,7 +101,9 @@ export async function captureCut(
     throw new Error("captureCut: 2D canvas context unavailable");
   }
 
-  // Step 1 — draw the live video frame, un-mirrored, cover-fit.
+  // Step 1 — draw the live video frame, mirrored to match the preview,
+  // cover-fit. The scale/translate is scoped between save/restore so the
+  // frame draw below stays unflipped.
   if (video.videoWidth > 0 && video.videoHeight > 0) {
     const v = coverCrop(
       video.videoWidth,
@@ -99,7 +111,11 @@ export async function captureCut(
       CUT_WIDTH,
       CUT_HEIGHT,
     );
+    ctx.save();
+    ctx.translate(CUT_WIDTH, 0);
+    ctx.scale(-1, 1);
     ctx.drawImage(video, v.sx, v.sy, v.sw, v.sh, 0, 0, CUT_WIDTH, CUT_HEIGHT);
+    ctx.restore();
   }
 
   // Step 2 — overlay the frame PNG, cover-fit (identical to LiveOverlay).

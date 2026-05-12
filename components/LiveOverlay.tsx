@@ -5,10 +5,11 @@
  * the active frame PNG layered on top, a "컷 N/총컷수" badge in the top-left,
  * and a Bubble tagline at the bottom for the active frame's copy.
  *
- * Mirror policy (locked in M2, consumed by M4):
+ * Mirror policy:
  *   - Live <video> receives CSS transform: scaleX(-1) (selfie convention).
- *   - Captured cut from drawImage(video,…) in M4 is un-mirrored. captureCut
- *     in lib/capture.ts must NOT apply ctx.scale(-1, 1).
+ *   - captureCut in lib/capture.ts mirrors the video draw with a matching
+ *     translate + scale(-1,1) so the saved cut matches what the user saw.
+ *     The frame PNG is drawn unflipped at the same scope.
  *
  * Aspect chain (re-locked 2026-05-07 to match the frame artwork natively):
  *   - The container CSS aspect ratio is 720:900 (== 0.8) — the same aspect as

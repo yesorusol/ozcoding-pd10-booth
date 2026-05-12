@@ -47,7 +47,7 @@ export interface Frame {
 export interface Cut {
   index: number; // 0..6
   frameId: Exclude<FrameId, "title-card">;
-  /** Captured 512x576 RGBA canvas (or its dataURL) — un-mirrored. */
+  /** Captured 512x576 RGBA canvas (or its dataURL) — mirrored to match the preview. */
   imageBitmap: ImageBitmap | null;
   capturedAt: number;
 }
@@ -148,10 +148,12 @@ export class TunnelHostUnavailableError extends Error {
 // ---------------------------------------------------------------------------
 
 /**
- * Mirror policy: TRUE on preview <video> (selfie convention),
- * FALSE on captured canvas (saved photo is un-mirrored so text reads correctly).
+ * Mirror policy: TRUE on preview <video> (selfie convention) AND on the
+ * captured cut so the saved photo matches what the user saw at the booth.
  *
- * Applied as CSS `transform: scaleX(-1)` on the <video> element only.
- * `captureCut` in lib/capture.ts must NOT apply ctx.scale(-1, 1).
+ * Applied as CSS `transform: scaleX(-1)` on the <video> element, and as
+ * a `translate + scale(-1,1)` transform around the video draw in
+ * `captureCut` (lib/capture.ts). The frame PNG is drawn unflipped so any
+ * text or asymmetric artwork on the frame stays legible.
  */
 export const MIRROR_PREVIEW = true as const;

@@ -85,6 +85,12 @@ interface StickerEditorProps {
   background?: BackgroundChoice;
   /** Called when user taps a background swatch. Parent re-composes. */
   onBackgroundChange?: (next: BackgroundChoice) => void;
+  /**
+   * Toggle the pattern grid in the bg picker. Challenge mode hides
+   * patterns because they obscure the inter-cell window-frame structure;
+   * normal mode keeps them visible. Defaults to true (normal mode).
+   */
+  showPatterns?: boolean;
   /** Called with the final list when user taps 완료. */
   onComplete: (stickers: PlacedStickerInstance[]) => void;
   /** Called when user taps 처음부터 (reset back to capture). */
@@ -99,6 +105,7 @@ export function StickerEditor({
   aspectRatio = DEFAULT_ASPECT,
   background,
   onBackgroundChange,
+  showPatterns = true,
   onComplete,
   onReset,
 }: StickerEditorProps) {
@@ -433,7 +440,7 @@ export function StickerEditor({
         <div className="flex-1 overflow-y-auto p-3">
           {onBackgroundChange ? (
             <>
-              {(() => {
+              {showPatterns ? (() => {
                 const totalBgPages = Math.max(
                   1,
                   Math.ceil(BACKGROUND_PATTERNS.length / BACKGROUND_PATTERNS_PAGE_SIZE)
@@ -524,9 +531,9 @@ export function StickerEditor({
                     </div>
                   </div>
                 );
-              })()}
+              })() : null}
 
-              <p className="mb-3 mt-5 font-body text-xs font-bold text-cabinet-frame">
+              <p className="mb-3 mt-2 font-body text-xs font-bold text-cabinet-frame">
                 배경 색상
               </p>
               <div

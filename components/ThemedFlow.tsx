@@ -3,10 +3,17 @@
 /**
  * components/ThemedFlow.tsx — Themed (7-cut character-frame) booth flow.
  *
- * Migrated verbatim from `app/booth/page.tsx`'s original BoothPage body.
- * Owns the session reducer, camera lifecycle, frame preload, and the
- * countdown→flash→preview→compositing pipeline that produces the 1080×2400
- * sheet via `composeSheet`.
+ * Pipeline:
+ *   camera-priming → prep → countdown → flash → preview → (×7 cuts)
+ *     → compositing (produces bare sheet; defers upload)
+ *     → sticker editor (StickerEditor on the composed sheet)
+ *     → re-composite (burn stickers in via composeStickersOnto)
+ *     → upload + qr-display
+ *
+ * Background palette: the user-chosen `BackgroundChoice` fills the whole
+ * sheet, so the outer frame + inter-cell gutters + cell 7 all wear the
+ * same surface and read as one connected "window frame" around the
+ * 7 captured photos.
  */
 
 import { useCallback, useEffect, useReducer, useRef, useState } from "react";
@@ -21,9 +28,10 @@ import { CameraDeniedBanner } from "@/components/CameraDeniedBanner";
 import { QRScreen } from "@/components/QRScreen";
 import { Bubble } from "@/components/Bubble";
 import { ScaleToFit } from "@/components/ScaleToFit";
+import { StickerEditor } from "@/components/StickerEditor";
 
 import { useCamera, type CameraStatus } from "@/lib/use-camera";
-import { CAPTURE_FRAMES, FRAMES, TITLE_FRAME } from "@/lib/frames";
+import { CAPTURE_FRAMES, FRAMES } from "@/lib/frames";
 import { COPY } from "@/lib/copy";
 import {
   reducer,
@@ -35,9 +43,18 @@ import {
   type CameraErrorKind,
 } from "@/lib/session-machine";
 import { captureCut } from "@/lib/capture";
-import { composeSheet } from "@/lib/sheet-composer";
+import {
+  composeSheet,
+  preloadAllSheetBackgrounds,
+  SHEET_WIDTH,
+  SHEET_HEIGHT,
+  DEFAULT_SHEET_BACKGROUND,
+} from "@/lib/sheet-composer";
+import { composeStickersOnto } from "@/lib/sticker-composer";
 import { uploadSheet } from "@/lib/upload-sheet";
 import { TunnelHostUnavailableError, type Cut } from "@/lib/types";
+import type { PlacedStickerInstance } from "@/lib/sticker-assets";
+import type { BackgroundChoice } from "@/lib/background-assets";
 
 type DeniedStatus = Extract<CameraStatus, "denied" | "no-device" | "ended">;
 
@@ -57,7 +74,22 @@ export function ThemedFlow() {
   }));
 
   const frameImagesRef = useRef<Map<string, HTMLImageElement>>(new Map());
+  // Bare composed sheet (pre-sticker). Held while the editor is open.
+  const baseBlobRef = useRef<Blob | null>(null);
+  // Display URL for whatever's currently shown in editor / QR screen.
   const [sheetBlobUrl, setSheetBlobUrl] = useState<string | null>(null);
+  // Editor visibility. True after compositing succeeds, false after 완료.
+  const [editorOpen, setEditorOpen] = useState(false);
+  // Final-composite-and-upload in progress (after 완료 click).
+  const [finalizing, setFinalizing] = useState(false);
+  // User's selected sheet background (fills frame + cell 7).
+  const [selectedBackground, setSelectedBackground] =
+    useState<BackgroundChoice>(DEFAULT_SHEET_BACKGROUND);
+
+  // Warm pattern images so the first re-compose after a swatch tap is instant.
+  useEffect(() => {
+    preloadAllSheetBackgrounds();
+  }, []);
 
   useEffect(() => {
     camera.start();
@@ -162,43 +194,99 @@ export function ThemedFlow() {
     }
   }, [state.phase, camera.status, camera.videoRef]);
 
+  // Compositing — produces the bare sheet, then opens the editor instead of
+  // uploading right away.
   useEffect(() => {
     if (state.phase !== "compositing") return;
+    if (baseBlobRef.current) return; // already composed; editor already open
     let cancelled = false;
     let blobUrl: string | null = null;
     (async () => {
       try {
-        const titleImg = frameImagesRef.current.get(TITLE_FRAME.id);
-        if (!titleImg) {
-          throw new Error("title-card image not preloaded");
-        }
         const blob = await composeSheet({
           cuts: state.cuts,
-          titleCardImg: titleImg,
+          background: selectedBackground,
         });
         if (cancelled) return;
+        baseBlobRef.current = blob;
         blobUrl = URL.createObjectURL(blob);
         setSheetBlobUrl(blobUrl);
-
-        const record = await uploadSheet(blob);
-        if (cancelled) return;
-        dispatch({ type: "COMPOSE_DONE", publicUrl: record.publicUrl });
+        setEditorOpen(true);
       } catch (err) {
         if (cancelled) return;
-        if (err instanceof TunnelHostUnavailableError) {
-          dispatch({ type: "COMPOSE_FAIL_TUNNEL" });
-        } else {
-          console.error("compose+upload failed:", err);
-          dispatch({ type: "RESET" });
-          router.push("/");
-        }
+        console.error("compose failed:", err);
+        dispatch({ type: "RESET" });
+        router.push("/");
       }
     })();
     return () => {
       cancelled = true;
-      if (blobUrl) URL.revokeObjectURL(blobUrl);
+      // Don't revoke blobUrl here — editor still uses it. Cleanup happens
+      // when the blob URL state is replaced or RESET fires.
     };
+    // selectedBackground is intentionally read at first compose only —
+    // later swatch taps go through onBackgroundChange.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.phase, state.cuts, router]);
+
+  // User picked a new sheet background → recompose preview.
+  const onBackgroundChange = useCallback(
+    async (next: BackgroundChoice) => {
+      setSelectedBackground(next);
+      try {
+        const blob = await composeSheet({
+          cuts: state.cuts,
+          background: next,
+        });
+        baseBlobRef.current = blob;
+        // The cleanup effect below revokes the previous URL when state
+        // changes — do NOT revoke manually here (the inline pattern
+        // double-fires under React 18 strict mode and can kill the new URL).
+        setSheetBlobUrl(URL.createObjectURL(blob));
+      } catch (err) {
+        console.error("background recompose failed:", err);
+      }
+    },
+    [state.cuts],
+  );
+
+  // Editor 완료 → burn stickers, upload, advance to qr-display.
+  const onEditorComplete = useCallback(
+    async (stickers: PlacedStickerInstance[]) => {
+      const baseBlob = baseBlobRef.current;
+      if (!baseBlob) return;
+      setFinalizing(true);
+      setEditorOpen(false);
+      try {
+        const finalBlob = await composeStickersOnto({ baseBlob, stickers });
+        setSheetBlobUrl(URL.createObjectURL(finalBlob));
+        const record = await uploadSheet(finalBlob);
+        dispatch({ type: "COMPOSE_DONE", publicUrl: record.publicUrl });
+      } catch (err) {
+        if (err instanceof TunnelHostUnavailableError) {
+          dispatch({ type: "COMPOSE_FAIL_TUNNEL" });
+        } else {
+          console.error("finalize failed:", err);
+          dispatch({ type: "RESET" });
+          router.push("/");
+        }
+      } finally {
+        setFinalizing(false);
+      }
+    },
+    [router],
+  );
+
+  const onEditorReset = useCallback(() => {
+    if (sheetBlobUrl) {
+      URL.revokeObjectURL(sheetBlobUrl);
+      setSheetBlobUrl(null);
+    }
+    baseBlobRef.current = null;
+    setEditorOpen(false);
+    dispatch({ type: "RESET" });
+    router.push("/");
+  }, [router, sheetBlobUrl]);
 
   useEffect(() => {
     return () => {
@@ -207,21 +295,53 @@ export function ThemedFlow() {
   }, [sheetBlobUrl]);
 
   const onRetry = useCallback(() => {
+    if (sheetBlobUrl) {
+      URL.revokeObjectURL(sheetBlobUrl);
+      setSheetBlobUrl(null);
+    }
+    baseBlobRef.current = null;
+    setEditorOpen(false);
     dispatch({ type: "RESET" });
     dispatch({ type: "START" });
     void camera.restart();
-  }, [camera]);
+  }, [camera, sheetBlobUrl]);
 
   const onNextUser = useCallback(() => {
     if (sheetBlobUrl) {
       URL.revokeObjectURL(sheetBlobUrl);
       setSheetBlobUrl(null);
     }
+    baseBlobRef.current = null;
     router.push("/");
   }, [router, sheetBlobUrl]);
 
   const safeCutIndex = Math.min(state.cutIndex, TOTAL_CUTS - 1);
   const activeFrame = CAPTURE_FRAMES[safeCutIndex];
+
+  // EDITOR — full-screen take-over while the user decorates the composite.
+  if (editorOpen && sheetBlobUrl) {
+    return (
+      <StickerEditor
+        photoSrc={sheetBlobUrl}
+        aspectRatio={SHEET_WIDTH / SHEET_HEIGHT}
+        background={selectedBackground}
+        onBackgroundChange={onBackgroundChange}
+        showPatterns={false}
+        onComplete={onEditorComplete}
+        onReset={onEditorReset}
+      />
+    );
+  }
+
+  // FINALIZING — brief loader while we burn stickers + upload.
+  if (finalizing) {
+    return (
+      <main className="flex h-screen w-screen flex-col items-center justify-center gap-4 bg-crt-cream">
+        <Bubble size="lg">{COPY.booth.compositingHeadline}</Bubble>
+        <p className="font-pixel text-lg text-cabinet-frame">{COPY.booth.compositingSub}</p>
+      </main>
+    );
+  }
 
   const isCabinetPhase =
     state.phase === "camera-priming-error" ||

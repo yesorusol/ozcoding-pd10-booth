@@ -325,12 +325,24 @@ export function StickerEditor({
     transformStartRef.current = null;
   }, []);
 
-  const photoWrapperStyle: CSSProperties = {
-    aspectRatio: `${aspectRatio}`,
-    height: "100%",
-    maxWidth: "100%",
-    containerType: "inline-size",
-  };
+  // Wide-aspect sheets (challenge 2×4, aspectRatio > 1) blow past the
+  // viewport when sized by height alone — clamp to width-driven sizing.
+  // Tall sheets (normal 4-cut, aspectRatio < 1) stay height-driven so
+  // the photo zone fills the available vertical space.
+  const photoWrapperStyle: CSSProperties = aspectRatio >= 1
+    ? {
+        aspectRatio: `${aspectRatio}`,
+        width: "100%",
+        maxWidth: "100%",
+        maxHeight: "100%",
+        containerType: "inline-size",
+      }
+    : {
+        aspectRatio: `${aspectRatio}`,
+        height: "100%",
+        maxWidth: "100%",
+        containerType: "inline-size",
+      };
 
   return (
     <div

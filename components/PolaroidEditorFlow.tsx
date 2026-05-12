@@ -26,7 +26,6 @@ import {
   type ReactNode,
   type RefObject,
 } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 import { BoothSideRail } from "@/components/BoothSideRail";
@@ -391,24 +390,12 @@ export function PolaroidEditorFlow() {
         ) : state.phase === "tunnel-host-error" ? (
           <TunnelErrorScreen onRetry={onRetry} />
         ) : (
-          <div className="flex flex-col gap-4">
-            <QRScreen
-              publicUrl={state.publicUrl!}
-              sheetBlobUrl={sheetBlobUrl}
-              onNext={onNextUser}
-            />
-            {/* Challenge funnel button — appears below QR screen.
-                Size + border match the yellow '처음으로 돌아가기' button so
-                the two CTAs read as a paired stack. */}
-            <Link
-              href="/themed"
-              data-testid="challenge-funnel-button"
-              className="mx-auto flex items-center gap-2 rounded-full border-2 border-cabinet-frame bg-btn-blue px-10 py-3 font-marquee text-xl tracking-wide text-white shadow-soft transition active:translate-y-px"
-            >
-              <span>챌린지 사진 도전</span>
-              <span aria-hidden>→</span>
-            </Link>
-          </div>
+          <QRScreen
+            publicUrl={state.publicUrl!}
+            sheetBlobUrl={sheetBlobUrl}
+            onNext={onNextUser}
+            challengeHref="/themed"
+          />
         )}
       </CabinetChrome>
     </ScaleToFit>

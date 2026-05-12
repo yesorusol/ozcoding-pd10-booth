@@ -3,13 +3,22 @@
 /**
  * components/QRScreen.tsx — Result screen rendered during phase=qr-display.
  *
- * Shows the tunnel-public-URL as a QR code (encoded via the `qrcode` npm
- * package), a small inline preview of the composed sheet PNG, and a
- * "다음 사용자" button that returns to the idle screen (per AC#9).
- * The plaintext URL fallback was removed for a cleaner kiosk look —
- * modern Korean smartphones auto-detect QR codes from the camera.
+ * Two-step result UX:
+ *   1. "photo" step — the composed sheet fills the screen as the hero so
+ *      the user can confirm the shot before committing to a QR. CTA is a
+ *      yellow "QR 만들기" button that advances to the QR step.
+ *   2. "qr" step — the photo shrinks to a side-by-side companion of a
+ *      small (~120px) scannable QR, with "처음으로 돌아가기" as the primary
+ *      CTA. Normal-mode callers can pass `challengeHref` to attach the
+ *      blue funnel link below the yellow button.
+ *
+ * The QR image is generated eagerly via `qrcode` so it's ready by the
+ * time the user taps "QR 만들기". The plaintext URL fallback was removed
+ * for a cleaner kiosk look — modern Korean smartphones auto-detect QR
+ * codes from the camera.
  */
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import QRCode from "qrcode";
 import { Bubble } from "./Bubble";
@@ -20,11 +29,22 @@ export interface QRScreenProps {
   publicUrl: string;
   /** Optional in-memory blob URL for the inline sheet preview. */
   sheetBlobUrl?: string | null;
-  /** Fired by the "다음 사용자" button. */
+  /** Fired by the "처음으로 돌아가기" button on the QR step. */
   onNext: () => void;
+  /** When set, renders a "챌린지 사진 도전 →" Link on the QR step. */
+  challengeHref?: string;
+  /** Test escape hatch — start at the QR step instead of "photo". */
+  initialStep?: "photo" | "qr";
 }
 
-export function QRScreen({ publicUrl, sheetBlobUrl, onNext }: QRScreenProps) {
+export function QRScreen({
+  publicUrl,
+  sheetBlobUrl: _sheetBlobUrl,
+  onNext,
+  challengeHref,
+  initialStep = "photo",
+}: QRScreenProps) {
+  const [step, setStep] = useState<"photo" | "qr">(initialStep);
   const [qrSrc, setQrSrc] = useState<string | null>(null);
 
   useEffect(() => {
@@ -46,68 +66,102 @@ export function QRScreen({ publicUrl, sheetBlobUrl, onNext }: QRScreenProps) {
     };
   }, [publicUrl]);
 
+  const subline =
+    step === "photo"
+      ? "사진이 잘 나왔는지 확인해 보세요"
+      : COPY.result.subline;
+
   return (
     <div
       data-testid="qr-screen"
       className="flex flex-col items-center gap-3 p-3 text-cabinet-frame"
     >
       <h2 className="font-marquee text-3xl">{COPY.result.headline}</h2>
-      <Bubble size="md">{COPY.result.subline}</Bubble>
+      <Bubble size="md">{subline}</Bubble>
 
-      {/* Result hero: composed sheet on the left, QR on the right, locked
-          to one row so the cabinet doesn't grow vertically. Photo width
-          is capped so a small QR (~130px) still fits alongside it inside
-          the cabinet's content column. */}
-      <div className="flex w-full items-center justify-center gap-4">
-        {publicUrl ? (
-          // Use the just-uploaded public URL as the preview source — robust to
-          // the blob URL lifecycle and matches what the QR resolves to. The
-          // `sheetBlobUrl` prop is kept for ThemedFlow compatibility but no
-          // longer required on this screen.
+      {step === "photo" ? (
+        // Photo-first hero — full-size composed sheet, no QR yet.
+        publicUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={publicUrl}
             alt="합성된 시트 미리보기"
             data-testid="sheet-preview"
-            className="max-h-[320px] min-w-0 flex-shrink rounded-md border-2 border-cabinet-frame bg-white object-contain shadow-soft"
+            className="max-h-[420px] rounded-md border-2 border-cabinet-frame bg-white object-contain shadow-soft"
           />
-        ) : null}
+        ) : null
+      ) : (
+        // QR step — composed sheet shrunk to sit next to a small QR.
+        <div className="flex w-full items-center justify-center gap-4">
+          {publicUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={publicUrl}
+              alt="합성된 시트 미리보기"
+              data-testid="sheet-preview"
+              className="max-h-[320px] min-w-0 flex-shrink rounded-md border-2 border-cabinet-frame bg-white object-contain shadow-soft"
+            />
+          ) : null}
 
-        <div className="flex flex-shrink-0 flex-col items-center gap-1.5">
-          <div className="rounded-md border-2 border-cabinet-frame bg-white p-1.5 shadow-soft">
-            {qrSrc ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={qrSrc}
-                alt={`QR code for ${publicUrl}`}
-                data-testid="qr-image"
-                className="block h-[120px] w-[120px] sm:h-[140px] sm:w-[140px]"
-              />
-            ) : (
-              <div
-                data-testid="qr-loading"
-                className="flex h-[120px] w-[120px] animate-pulse items-center justify-center bg-gray-200 sm:h-[140px] sm:w-[140px]"
-              >
-                <span className="font-pixel text-xs text-cabinet-frame/60">
-                  QR 생성 중...
-                </span>
-              </div>
-            )}
+          <div className="flex flex-shrink-0 flex-col items-center gap-1.5">
+            <div className="rounded-md border-2 border-cabinet-frame bg-white p-1.5 shadow-soft">
+              {qrSrc ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={qrSrc}
+                  alt={`QR code for ${publicUrl}`}
+                  data-testid="qr-image"
+                  className="block h-[120px] w-[120px] sm:h-[140px] sm:w-[140px]"
+                />
+              ) : (
+                <div
+                  data-testid="qr-loading"
+                  className="flex h-[120px] w-[120px] animate-pulse items-center justify-center bg-gray-200 sm:h-[140px] sm:w-[140px]"
+                >
+                  <span className="font-pixel text-xs text-cabinet-frame/60">
+                    QR 생성 중...
+                  </span>
+                </div>
+              )}
+            </div>
+            <p className="text-center font-body text-[11px] leading-tight text-cabinet-frame/70">
+              폰 카메라로 스캔
+            </p>
           </div>
-          <p className="text-center font-body text-[11px] leading-tight text-cabinet-frame/70">
-            폰 카메라로 스캔
-          </p>
         </div>
-      </div>
+      )}
 
-      <button
-        type="button"
-        onClick={onNext}
-        data-testid="next-user-btn"
-        className="mt-1 rounded-full border-2 border-cabinet-frame bg-btn-yellow px-10 py-3 font-marquee text-xl tracking-wide text-cabinet-frame shadow-soft transition active:translate-y-px"
-      >
-        {COPY.result.nextUserButton}
-      </button>
+      {step === "photo" ? (
+        <button
+          type="button"
+          onClick={() => setStep("qr")}
+          data-testid="make-qr-btn"
+          className="mt-1 rounded-full border-2 border-cabinet-frame bg-btn-yellow px-10 py-3 font-marquee text-xl tracking-wide text-cabinet-frame shadow-soft transition active:translate-y-px"
+        >
+          QR 만들기
+        </button>
+      ) : (
+        <div className="flex flex-col items-center gap-3">
+          <button
+            type="button"
+            onClick={onNext}
+            data-testid="next-user-btn"
+            className="rounded-full border-2 border-cabinet-frame bg-btn-yellow px-10 py-3 font-marquee text-xl tracking-wide text-cabinet-frame shadow-soft transition active:translate-y-px"
+          >
+            {COPY.result.nextUserButton}
+          </button>
+          {challengeHref ? (
+            <Link
+              href={challengeHref}
+              data-testid="challenge-funnel-button"
+              className="flex items-center gap-2 rounded-full border-2 border-cabinet-frame bg-btn-blue px-10 py-3 font-marquee text-xl tracking-wide text-white shadow-soft transition active:translate-y-px"
+            >
+              <span>챌린지 사진 도전</span>
+              <span aria-hidden>→</span>
+            </Link>
+          ) : null}
+        </div>
+      )}
     </div>
   );
 }

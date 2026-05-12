@@ -122,8 +122,16 @@ export async function normalizeArtworkWidth(input: Buffer): Promise<Buffer> {
   if (!bbox) return input;
   if (bbox.width >= RAW_WIDTH) return input;
 
-  const newWidth = RAW_WIDTH;
-  const newHeight = Math.round((RAW_WIDTH / bbox.width) * bbox.height);
+  // Default: scale to fill RAW_WIDTH. If that would overflow RAW_HEIGHT
+  // (artwork fills the full vertical and is just slightly narrower), fall
+  // back to scaling by height so we never composite a taller-than-canvas
+  // image (sharp throws on that).
+  let newWidth = RAW_WIDTH;
+  let newHeight = Math.round((RAW_WIDTH / bbox.width) * bbox.height);
+  if (newHeight > RAW_HEIGHT) {
+    newHeight = RAW_HEIGHT;
+    newWidth = Math.round((RAW_HEIGHT / bbox.height) * bbox.width);
+  }
 
   const cropped = await sharp(input)
     .extract({
@@ -143,12 +151,12 @@ export async function normalizeArtworkWidth(input: Buffer): Promise<Buffer> {
   const rawCenterY = (RAW_HEIGHT - 1) / 2;
   const anchorBottom = originalCenterY > rawCenterY;
 
-  // Clamp newTop so we never overflow the raw canvas (artwork could be taller
-  // than RAW_HEIGHT after up-scaling in extreme cases).
+  // Clamp newTop / newLeft so we never overflow the raw canvas.
   const maxTop = Math.max(0, RAW_HEIGHT - newHeight);
   const newTop = anchorBottom
     ? maxTop
     : Math.max(0, Math.floor((RAW_HEIGHT - newHeight) / 2));
+  const newLeft = Math.max(0, Math.floor((RAW_WIDTH - newWidth) / 2));
 
   return sharp({
     create: {
@@ -158,7 +166,7 @@ export async function normalizeArtworkWidth(input: Buffer): Promise<Buffer> {
       background: { r: 0, g: 0, b: 0, alpha: 0 },
     },
   })
-    .composite([{ input: resized, left: 0, top: newTop }])
+    .composite([{ input: resized, left: newLeft, top: newTop }])
     .png()
     .toBuffer();
 }

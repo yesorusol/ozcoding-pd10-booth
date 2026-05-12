@@ -45,8 +45,44 @@ export interface SheetCompositionOptions {
   cuts: ReadonlyArray<Cut>;
   /** Loaded title-card PNG (HTMLImageElement). */
   titleCardImg: HTMLImageElement;
-  /** Sheet background fill. Defaults to white. */
+  /**
+   * Optional solid override for the sheet background. When omitted the
+   * sheet renders a cream base + sparse pink polkadot pattern so the
+   * outer frame matches the title-card cell's tone (no more bare-white
+   * border around the polaroid).
+   */
   background?: string;
+}
+
+/** Cream surface that mirrors the title-card cell. */
+const SHEET_BG_CREAM = "#fff8e0";
+/** Pink polkadot accent on the cream surface. */
+const SHEET_BG_DOT = "#ffd6e8";
+/** Polkadot grid step in sheet pixels. Brick offset on alternate rows. */
+const SHEET_DOT_STEP = 75;
+/** Polkadot radius in sheet pixels. */
+const SHEET_DOT_R = 9;
+
+function paintCreamPolkadot(
+  ctx: CanvasRenderingContext2D,
+  w: number,
+  h: number,
+): void {
+  ctx.fillStyle = SHEET_BG_CREAM;
+  ctx.fillRect(0, 0, w, h);
+  ctx.fillStyle = SHEET_BG_DOT;
+  ctx.globalAlpha = 0.7;
+  let rowIdx = 0;
+  for (let y = SHEET_DOT_STEP / 2; y < h; y += SHEET_DOT_STEP) {
+    const offsetX = rowIdx % 2 === 0 ? 0 : SHEET_DOT_STEP / 2;
+    for (let x = SHEET_DOT_STEP / 2 + offsetX; x < w; x += SHEET_DOT_STEP) {
+      ctx.beginPath();
+      ctx.arc(x, y, SHEET_DOT_R, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    rowIdx++;
+  }
+  ctx.globalAlpha = 1;
 }
 
 /**
@@ -69,7 +105,7 @@ export function cellRect(gridIndex: number): { x: number; y: number } {
 export async function composeSheet(
   options: SheetCompositionOptions,
 ): Promise<Blob> {
-  const { cuts, titleCardImg, background = "#ffffff" } = options;
+  const { cuts, titleCardImg, background } = options;
 
   if (cuts.length !== 7) {
     throw new Error(`composeSheet: expected 7 cuts, got ${cuts.length}`);
@@ -83,8 +119,12 @@ export async function composeSheet(
     throw new Error("composeSheet: 2D canvas context unavailable");
   }
 
-  ctx.fillStyle = background;
-  ctx.fillRect(0, 0, SHEET_WIDTH, SHEET_HEIGHT);
+  if (background) {
+    ctx.fillStyle = background;
+    ctx.fillRect(0, 0, SHEET_WIDTH, SHEET_HEIGHT);
+  } else {
+    paintCreamPolkadot(ctx, SHEET_WIDTH, SHEET_HEIGHT);
+  }
 
   // Cuts: cell aspect matches cut aspect, so uniform scale (no cover-crop).
   for (const frame of CAPTURE_FRAMES) {

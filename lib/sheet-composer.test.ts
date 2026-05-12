@@ -116,6 +116,10 @@ describe("composeSheet", () => {
       drawImage,
       fillRect,
       fillStyle: "",
+      globalAlpha: 1,
+      beginPath: vi.fn(),
+      arc: vi.fn(),
+      fill: vi.fn(),
     }) as unknown as CanvasRenderingContext2D);
   });
 
@@ -209,6 +213,10 @@ describe("composeSheet", () => {
       drawImage,
       fillRect,
       fillStyle: "",
+      globalAlpha: 1,
+      beginPath: vi.fn(),
+      arc: vi.fn(),
+      fill: vi.fn(),
     }) as unknown as CanvasRenderingContext2D);
     stub.toBlob = vi.fn((cb: BlobCallback) => cb(null));
     const titleImg = makeMockTitleImg();

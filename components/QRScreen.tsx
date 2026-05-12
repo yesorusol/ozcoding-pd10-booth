@@ -54,11 +54,11 @@ export function QRScreen({ publicUrl, sheetBlobUrl, onNext }: QRScreenProps) {
       <h2 className="font-marquee text-3xl">{COPY.result.headline}</h2>
       <Bubble size="md">{COPY.result.subline}</Bubble>
 
-      {/* Result hero: the composed sheet is the focal point. The QR sits
-          alongside it, small but still scannable from arm's length on a
-          modern phone (~160px on the kiosk display). Order is reversed
-          from the previous layout — photo first, QR second. */}
-      <div className="flex flex-wrap items-center justify-center gap-5">
+      {/* Result hero: composed sheet on the left, QR on the right, locked
+          to one row so the cabinet doesn't grow vertically. Photo width
+          is capped so a small QR (~130px) still fits alongside it inside
+          the cabinet's content column. */}
+      <div className="flex w-full items-center justify-center gap-4">
         {publicUrl ? (
           // Use the just-uploaded public URL as the preview source — robust to
           // the blob URL lifecycle and matches what the QR resolves to. The
@@ -69,11 +69,11 @@ export function QRScreen({ publicUrl, sheetBlobUrl, onNext }: QRScreenProps) {
             src={publicUrl}
             alt="합성된 시트 미리보기"
             data-testid="sheet-preview"
-            className="max-h-[440px] rounded-md border-2 border-cabinet-frame bg-white shadow-soft sm:max-h-[560px]"
+            className="max-h-[420px] min-w-0 flex-shrink rounded-md border-2 border-cabinet-frame bg-white object-contain shadow-soft"
           />
         ) : null}
 
-        <div className="flex flex-col items-center gap-2">
+        <div className="flex flex-shrink-0 flex-col items-center gap-1.5">
           <div className="rounded-md border-2 border-cabinet-frame bg-white p-1.5 shadow-soft">
             {qrSrc ? (
               // eslint-disable-next-line @next/next/no-img-element
@@ -81,12 +81,12 @@ export function QRScreen({ publicUrl, sheetBlobUrl, onNext }: QRScreenProps) {
                 src={qrSrc}
                 alt={`QR code for ${publicUrl}`}
                 data-testid="qr-image"
-                className="block h-[140px] w-[140px] sm:h-[160px] sm:w-[160px]"
+                className="block h-[120px] w-[120px] sm:h-[140px] sm:w-[140px]"
               />
             ) : (
               <div
                 data-testid="qr-loading"
-                className="flex h-[140px] w-[140px] animate-pulse items-center justify-center bg-gray-200 sm:h-[160px] sm:w-[160px]"
+                className="flex h-[120px] w-[120px] animate-pulse items-center justify-center bg-gray-200 sm:h-[140px] sm:w-[140px]"
               >
                 <span className="font-pixel text-xs text-cabinet-frame/60">
                   QR 생성 중...
@@ -94,7 +94,7 @@ export function QRScreen({ publicUrl, sheetBlobUrl, onNext }: QRScreenProps) {
               </div>
             )}
           </div>
-          <p className="font-body text-[11px] text-cabinet-frame/70">
+          <p className="text-center font-body text-[11px] leading-tight text-cabinet-frame/70">
             폰 카메라로 스캔
           </p>
         </div>

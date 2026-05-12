@@ -69,7 +69,7 @@ export function QRScreen({ publicUrl, sheetBlobUrl, onNext }: QRScreenProps) {
             src={publicUrl}
             alt="합성된 시트 미리보기"
             data-testid="sheet-preview"
-            className="max-h-[420px] min-w-0 flex-shrink rounded-md border-2 border-cabinet-frame bg-white object-contain shadow-soft"
+            className="max-h-[320px] min-w-0 flex-shrink rounded-md border-2 border-cabinet-frame bg-white object-contain shadow-soft"
           />
         ) : null}
 

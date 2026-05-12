@@ -54,28 +54,11 @@ export function QRScreen({ publicUrl, sheetBlobUrl, onNext }: QRScreenProps) {
       <h2 className="font-marquee text-3xl">{COPY.result.headline}</h2>
       <Bubble size="md">{COPY.result.subline}</Bubble>
 
-      <div className="flex flex-wrap items-start justify-center gap-4">
-        <div className="rounded-md border-2 border-cabinet-frame bg-white p-2 shadow-soft">
-          {qrSrc ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={qrSrc}
-              alt={`QR code for ${publicUrl}`}
-              data-testid="qr-image"
-              className="block h-[240px] w-[240px] sm:h-[280px] sm:w-[280px]"
-            />
-          ) : (
-            <div
-              data-testid="qr-loading"
-              className="flex h-[240px] w-[240px] animate-pulse items-center justify-center bg-gray-200 sm:h-[280px] sm:w-[280px]"
-            >
-              <span className="font-pixel text-sm text-cabinet-frame/60">
-                QR 생성 중...
-              </span>
-            </div>
-          )}
-        </div>
-
+      {/* Result hero: the composed sheet is the focal point. The QR sits
+          alongside it, small but still scannable from arm's length on a
+          modern phone (~160px on the kiosk display). Order is reversed
+          from the previous layout — photo first, QR second. */}
+      <div className="flex flex-wrap items-center justify-center gap-5">
         {publicUrl ? (
           // Use the just-uploaded public URL as the preview source — robust to
           // the blob URL lifecycle and matches what the QR resolves to. The
@@ -86,9 +69,35 @@ export function QRScreen({ publicUrl, sheetBlobUrl, onNext }: QRScreenProps) {
             src={publicUrl}
             alt="합성된 시트 미리보기"
             data-testid="sheet-preview"
-            className="max-h-[280px] rounded-md border-2 border-cabinet-frame bg-white shadow-soft"
+            className="max-h-[440px] rounded-md border-2 border-cabinet-frame bg-white shadow-soft sm:max-h-[560px]"
           />
         ) : null}
+
+        <div className="flex flex-col items-center gap-2">
+          <div className="rounded-md border-2 border-cabinet-frame bg-white p-1.5 shadow-soft">
+            {qrSrc ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={qrSrc}
+                alt={`QR code for ${publicUrl}`}
+                data-testid="qr-image"
+                className="block h-[140px] w-[140px] sm:h-[160px] sm:w-[160px]"
+              />
+            ) : (
+              <div
+                data-testid="qr-loading"
+                className="flex h-[140px] w-[140px] animate-pulse items-center justify-center bg-gray-200 sm:h-[160px] sm:w-[160px]"
+              >
+                <span className="font-pixel text-xs text-cabinet-frame/60">
+                  QR 생성 중...
+                </span>
+              </div>
+            )}
+          </div>
+          <p className="font-body text-[11px] text-cabinet-frame/70">
+            폰 카메라로 스캔
+          </p>
+        </div>
       </div>
 
       <button

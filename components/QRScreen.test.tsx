@@ -18,7 +18,7 @@ describe("QRScreen", () => {
     toDataURL.mockReset();
   });
 
-  it("renders headline + subline + URL text", () => {
+  it("renders headline + subline", () => {
     toDataURL.mockResolvedValue("data:image/png;base64,fakeQR");
     render(
       <QRScreen
@@ -27,9 +27,7 @@ describe("QRScreen", () => {
       />,
     );
     expect(screen.getByText("완성!")).toBeInTheDocument();
-    expect(
-      screen.getByText("https://abc.ngrok-free.app/captures/x.png"),
-    ).toBeInTheDocument();
+    expect(screen.getByText("폰 카메라로 스캔")).toBeInTheDocument();
   });
 
   it("calls QRCode.toDataURL with the publicUrl and renders the data URL", async () => {
@@ -65,7 +63,7 @@ describe("QRScreen", () => {
     });
   });
 
-  it("renders the sheet preview when sheetBlobUrl is provided", async () => {
+  it("renders the sheet preview using publicUrl as the image source", () => {
     toDataURL.mockResolvedValue("data:image/png;base64,fakeQR");
     render(
       <QRScreen
@@ -76,12 +74,12 @@ describe("QRScreen", () => {
     );
     const preview = screen.getByTestId("sheet-preview") as HTMLImageElement;
     expect(preview).toBeInTheDocument();
-    expect(preview.src).toBe("blob:http://localhost/preview-1");
+    expect(preview.src).toBe("https://example.com/x.png");
   });
 
-  it("does NOT render the sheet preview when sheetBlobUrl is absent", () => {
+  it("does NOT render the sheet preview when publicUrl is empty", () => {
     toDataURL.mockResolvedValue("data:image/png;base64,fakeQR");
-    render(<QRScreen publicUrl="https://example.com/x.png" onNext={() => {}} />);
+    render(<QRScreen publicUrl="" onNext={() => {}} />);
     expect(screen.queryByTestId("sheet-preview")).toBeNull();
   });
 

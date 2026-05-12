@@ -741,8 +741,7 @@ export function StickerEditor({
             type="button"
             onClick={() => onComplete(placed)}
             data-testid="sticker-editor-complete"
-            className="flex-[2] rounded-full border border-cabinet-frame px-4 py-3 font-marquee text-base text-cabinet-frame shadow-soft active:translate-y-px"
-            style={{ backgroundColor: "#9ee63a" }}
+            className="flex-[2] rounded-full border border-cabinet-frame bg-btn-yellow px-4 py-3 font-marquee text-base text-cabinet-frame shadow-soft active:translate-y-px"
           >
             완료 →
           </button>

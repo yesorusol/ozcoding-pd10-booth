@@ -30,7 +30,7 @@ const config: Config = {
         // Accent buttons
         "btn-green": "#23c93a",
         "btn-red": "#ff3838",
-        "btn-yellow": "#ffd84d",
+        "btn-yellow": "#fff35d",
         "btn-blue": "#1ea7ff",
 
         // Legacy Y2K tones

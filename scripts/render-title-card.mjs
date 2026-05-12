@@ -50,9 +50,6 @@ const svg = `<?xml version="1.0" encoding="UTF-8"?>
   <rect width="${W}" height="${H}" fill="${CREAM}" />
   <!-- Halftone polka layer for Y2K texture -->
   ${halftoneDots()}
-  <!-- Inner frame (matches cabinet-frame navy border) -->
-  <rect x="22" y="22" width="${W - 44}" height="${H - 44}" fill="none" stroke="${NAVY}" stroke-width="6" rx="18" />
-  <rect x="34" y="34" width="${W - 68}" height="${H - 68}" fill="none" stroke="${NAVY}" stroke-width="2" stroke-dasharray="4 6" rx="12" opacity="0.7" />
 
   <!-- Corner sparkles -->
   ${star(120, 130, 32, YELLOW, NAVY)}

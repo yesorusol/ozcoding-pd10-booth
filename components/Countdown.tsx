@@ -23,7 +23,8 @@ export function Countdown({ seconds }: CountdownProps) {
       className="pointer-events-none font-marquee leading-none text-white"
       style={{
         fontSize: "clamp(4rem, 14vh, 9rem)",
-        textShadow: "0 0 24px #3aa6ff, 0 0 48px #3aa6ff, 3px 3px 0 #0c1b3d",
+        textShadow:
+          "0 0 24px #7be67d, 0 0 48px #3fbb4a, 3px 3px 0 #0c1b3d",
         WebkitTextStroke: "3px #0c1b3d",
       }}
     >

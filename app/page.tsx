@@ -65,10 +65,10 @@ function OnboardingScreen() {
           href="/booth?mode=normal"
           data-testid="onboarding-start"
           aria-label={COPY.onboarding.startButton}
-          className="flex h-12 min-w-[10rem] items-center justify-center gap-2 rounded-full border border-cabinet-frame bg-btn-yellow px-8 font-marquee text-xl text-cabinet-frame shadow-soft transition active:translate-y-px active:shadow-y2k-sm sm:h-14 sm:text-2xl md:h-16 md:text-3xl"
+          className="flex h-11 items-center justify-center gap-2 rounded-full border border-cabinet-frame bg-btn-yellow px-7 font-marquee text-lg text-cabinet-frame shadow-soft transition active:translate-y-px active:shadow-y2k-sm sm:h-12 sm:px-8 sm:text-xl"
         >
           <span>{COPY.onboarding.startButton}</span>
-          <span aria-hidden className="text-xl sm:text-2xl">→</span>
+          <span aria-hidden className="text-lg sm:text-xl">→</span>
         </Link>
       </div>
     </div>

@@ -419,7 +419,13 @@ export function StickerEditor({
         data-testid="sticker-panel"
         className="flex w-full shrink-0 flex-col border-t-2 border-cabinet-frame bg-white/80 md:h-full md:w-80 md:border-l-2 md:border-t-0"
       >
-        <header className="border-b border-cabinet-frame/30 bg-bubble-grad px-4 py-2">
+        <header
+          className="border-b border-cabinet-frame/30 px-4 py-2"
+          style={{
+            backgroundImage:
+              "linear-gradient(180deg, #7be67d 0%, #b8f0a8 55%, #e9ffd9 100%)",
+          }}
+        >
           <p className="font-marquee text-lg text-cabinet-frame">사진 꾸미기</p>
           <p className="font-body text-xs text-cabinet-frame/70">선택해서 사진에 붙여요</p>
         </header>

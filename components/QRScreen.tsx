@@ -4,9 +4,10 @@
  * components/QRScreen.tsx — Result screen rendered during phase=qr-display.
  *
  * Shows the tunnel-public-URL as a QR code (encoded via the `qrcode` npm
- * package), a small inline preview of the composed sheet PNG, the URL as
- * fallback text for older phones without a QR reader, and a "다음 사용자"
- * button that returns to the idle screen (per AC#9).
+ * package), a small inline preview of the composed sheet PNG, and a
+ * "다음 사용자" button that returns to the idle screen (per AC#9).
+ * The plaintext URL fallback was removed for a cleaner kiosk look —
+ * modern Korean smartphones auto-detect QR codes from the camera.
  */
 
 import { useEffect, useState } from "react";
@@ -89,13 +90,6 @@ export function QRScreen({ publicUrl, sheetBlobUrl, onNext }: QRScreenProps) {
           />
         ) : null}
       </div>
-
-      <p
-        data-testid="qr-url"
-        className="break-all text-center font-pixel text-xs text-cabinet-frame/70"
-      >
-        {publicUrl}
-      </p>
 
       <button
         type="button"

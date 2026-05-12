@@ -23,6 +23,10 @@
  *   • The applied scale is uniform (`scale(s)`) so all aspect ratios are
  *     preserved exactly.
  *   • `maxScale` (default 1) prevents up-scaling on huge displays.
+ *   • Outer wrapper is `flex items-center justify-center` so the scaled
+ *     cabinet sits in the visual center of the viewport. On tall screens
+ *     the leftover wallpaper splits evenly above and below the cabinet
+ *     instead of pooling at the bottom.
  */
 
 import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
@@ -79,15 +83,14 @@ export function ScaleToFit({
   return (
     <div
       data-testid="scale-to-fit"
-      className="h-screen w-full overflow-hidden"
+      className="flex h-screen w-full items-center justify-center overflow-hidden"
     >
       <div
         ref={ref}
-        className="mx-auto"
         style={{
           width: "max-content",
           transform: `scale(${scale})`,
-          transformOrigin: "top center",
+          transformOrigin: "center center",
           willChange: "transform",
         }}
       >

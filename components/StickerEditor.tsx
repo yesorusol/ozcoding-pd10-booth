@@ -423,7 +423,7 @@ export function StickerEditor({
           className="border-b border-cabinet-frame/30 px-4 py-2"
           style={{
             backgroundImage:
-              "linear-gradient(180deg, #7be67d 0%, #b8f0a8 55%, #e9ffd9 100%)",
+              "linear-gradient(180deg, #c4ecb0 0%, #d4f5c0 55%, #ecffd9 100%)",
           }}
         >
           <p className="font-marquee text-lg text-cabinet-frame">사진 꾸미기</p>
@@ -725,7 +725,10 @@ export function StickerEditor({
           })()}
         </div>
 
-        <footer className="flex gap-2 border-t border-cabinet-frame/30 bg-crt-cream p-3">
+        <footer
+          className="flex gap-2 border-t border-cabinet-frame/30 p-3"
+          style={{ backgroundColor: "#ecffd9" }}
+        >
           <button
             type="button"
             onClick={onReset}

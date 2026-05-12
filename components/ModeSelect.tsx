@@ -104,7 +104,7 @@ export function ModeSelect() {
                 onClick={() => setSelected(row.mode)}
                 className={
                   isSelected
-                    ? "flex w-full items-baseline gap-2 rounded-sm border-2 border-cabinet-frame bg-btn-yellow px-3 py-3 text-left shadow-soft transition active:translate-y-px sm:py-4"
+                    ? "flex w-full items-baseline gap-2 rounded-sm border border-cabinet-frame bg-btn-yellow px-3 py-3 text-left shadow-soft transition active:translate-y-px sm:py-4"
                     : "flex w-full items-baseline gap-2 rounded-sm border border-cabinet-frame bg-crt-cream px-3 py-3 text-left shadow-soft transition active:translate-y-px sm:py-4"
                 }
               >

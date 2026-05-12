@@ -326,15 +326,16 @@ export function StickerEditor({
   }, []);
 
   // Wide-aspect sheets (challenge 2×4, aspectRatio > 1) blow past the
-  // viewport when sized by height alone — clamp to width-driven sizing.
+  // viewport when sized by height alone — clamp to width-driven sizing
+  // AND scale back to 85% so the preview leaves breathing room around it.
   // Tall sheets (normal 4-cut, aspectRatio < 1) stay height-driven so
   // the photo zone fills the available vertical space.
   const photoWrapperStyle: CSSProperties = aspectRatio >= 1
     ? {
         aspectRatio: `${aspectRatio}`,
-        width: "100%",
-        maxWidth: "100%",
-        maxHeight: "100%",
+        width: "85%",
+        maxWidth: "85%",
+        maxHeight: "85%",
         containerType: "inline-size",
       }
     : {

@@ -51,13 +51,14 @@ export function Bubble({
     >
       {children}
       {tail ? (
+        // 꼬리: 회전된 정사각형 절반을 clip-path로 깔끔히 자름. 이전 135deg
+        // 그라데이션 50%/50% 컷이 안티앨리어싱 경계선으로 보이던 문제 해소.
         <span
           aria-hidden="true"
           data-testid="bubble-tail"
-          className="absolute -bottom-4 left-6 h-6 w-6 rotate-45 border-b border-l border-cabinet-frame"
+          className="absolute -bottom-4 left-6 h-6 w-6 rotate-45 border-b border-l border-cabinet-frame bg-white"
           style={{
-            background:
-              "linear-gradient(135deg, transparent 0%, transparent 50%, #ffffff 50%, #ffffff 100%)",
+            clipPath: "polygon(0 0, 0 100%, 100% 100%)",
           }}
         />
       ) : null}

@@ -62,6 +62,14 @@ export const BACKGROUND_PATTERNS: ReadonlyArray<BackgroundPattern> = [
   { id: "magic-in-the-air", src: "/backgrounds/magic-in-the-air.jpeg", label: "민트 마블", accent: "#7ddccf" },
   { id: "printable-pattern", src: "/backgrounds/printable-pattern.jpeg", label: "딸기 체크", accent: "#e63946" },
   { id: "swirle", src: "/backgrounds/swirle.jpeg", label: "옐로 소용돌이", accent: "#ffc94d" },
+  { id: "falafel-mint", src: "/backgrounds/falafel-mint.jpeg", label: "팔라펠", accent: "#cfe6c1" },
+  { id: "butterfly-blur", src: "/backgrounds/butterfly-blur.jpeg", label: "나비 블러", accent: "#a8c8ff" },
+  { id: "bliss-hill", src: "/backgrounds/bliss-hill.jpeg", label: "푸른 언덕", accent: "#7aa86b" },
+  { id: "leopard-pink", src: "/backgrounds/leopard-pink.jpeg", label: "핑크 레오파드", accent: "#e879b5" },
+  { id: "lace-pink", src: "/backgrounds/lace-pink.jpeg", label: "레이스 체크", accent: "#ff5fa8" },
+  { id: "plaid-magenta", src: "/backgrounds/plaid-magenta.jpeg", label: "네온 체크", accent: "#ff1a8d" },
+  { id: "plaid-pink", src: "/backgrounds/plaid-pink.jpeg", label: "핑크 체크", accent: "#ff8ac4" },
+  { id: "polkadot-cocoa", src: "/backgrounds/polkadot-cocoa.jpeg", label: "코코아 도트", accent: "#f5c7d3" },
 ];
 
 /** Patterns rendered per page in the editor picker (paginated with arrows). */

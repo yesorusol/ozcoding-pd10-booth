@@ -52,8 +52,9 @@ describe("M1: processed frame PNGs", () => {
     expect(data[3]).toBe(0);
   });
 
-  it("top-left padding pixel (10,10) is transparent for all frames", async () => {
-    for (const name of ALL_FRAMES) {
+  it("top-left padding pixel (10,10) is transparent for character frames", async () => {
+    // title-card is excluded: its MAKE MEMORIES design is full-bleed cream, not padded.
+    for (const name of CHARACTER_FRAMES) {
       const { data } = await sharp(path.join(PROC_DIR, `${name}.png`))
         .extract({ left: 10, top: 10, width: 1, height: 1 })
         .raw()
@@ -62,8 +63,9 @@ describe("M1: processed frame PNGs", () => {
     }
   });
 
-  it("top-right padding pixel (790,10) is transparent for all frames", async () => {
-    for (const name of ALL_FRAMES) {
+  it("top-right padding pixel (790,10) is transparent for character frames", async () => {
+    // title-card is excluded: its MAKE MEMORIES design is full-bleed cream, not padded.
+    for (const name of CHARACTER_FRAMES) {
       const { data } = await sharp(path.join(PROC_DIR, `${name}.png`))
         .extract({ left: 790, top: 10, width: 1, height: 1 })
         .raw()
@@ -72,18 +74,16 @@ describe("M1: processed frame PNGs", () => {
     }
   });
 
-  it("title-card known pink pixel (360,100) is opaque (not chroma-keyed)", async () => {
-    // title-card has pink rgb(255,77,143) at (360,100) in the raw 720×900 image.
-    // After +40px left padding, that pixel is at x=360+40=400 in processed coords.
+  it("title-card is fully opaque cream (full-bleed, not chroma-keyed)", async () => {
+    // MAKE MEMORIES title-card has cream background edge-to-edge. Sample a
+    // corner area to verify opacity + cream tint (rgb ~ 250,245,220ish).
     const { data } = await sharp(path.join(PROC_DIR, "title-card.png"))
-      .extract({ left: 400, top: 100, width: 1, height: 1 })
+      .extract({ left: 10, top: 10, width: 1, height: 1 })
       .raw()
       .toBuffer({ resolveWithObject: true });
-    // Should be opaque (alpha=255) — passthrough frames are NOT chroma-keyed
-    expect(data[3]).toBe(255);
-    // Should still be pink-ish
-    expect(data[0]).toBeGreaterThan(200); // red
-    expect(data[1]).toBeLessThan(150);    // green low
+    expect(data[3]).toBe(255); // opaque
+    expect(data[0]).toBeGreaterThan(200); // r — light/cream
+    expect(data[1]).toBeGreaterThan(200); // g — light/cream
   });
 
   it("artwork pixels (non-hole) remain opaque in character frames", async () => {

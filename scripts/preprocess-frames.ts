@@ -29,16 +29,19 @@ const CHARACTER_FRAMES = [
   "ramen",
   "tamagotchi",
   "teeth",
-  "mic",
   "cosplay",
   "waiter",
 ];
 
-// burger.png was hand-swapped to a new split-bun cutout (commit 70a54ae)
-// without updating raw/burger.png. Re-running preprocess against the stale
-// raw file overwrites the good processed image, so it is skipped here until
-// a fresh raw source matching the cutout design is committed.
-const PASSTHROUGH_FRAMES = ["title-card"];
+// Skip list — these frames had their processed/*.png hand-swapped to newer
+// designs while raw/*.png was left at the initial-commit version. Running
+// preprocess against the stale raw overwrites the good processed image and
+// regresses the design (observed 2026-05-13 on bb316b4). Until each frame
+// gets a fresh 720×900 raw source committed, leave them out of the pipeline.
+//   - burger:     swapped in 70a54ae to split-bun cutout
+//   - mic:        swapped in 53b0c49 to full-color cutout
+//   - title-card: swapped in 91f66e3 to MAKE MEMORIES design
+const PASSTHROUGH_FRAMES: string[] = [];
 
 const ALPHA_THRESHOLD = 128;
 

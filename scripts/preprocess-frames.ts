@@ -27,7 +27,6 @@ const PAD_TARGET_WIDTH = 800;
 
 const CHARACTER_FRAMES = [
   "ramen",
-  "tamagotchi",
   "teeth",
   "cosplay",
   "waiter",
@@ -41,6 +40,7 @@ const CHARACTER_FRAMES = [
 //   - burger:     swapped in 70a54ae to split-bun cutout
 //   - mic:        swapped in 53b0c49 to full-color cutout
 //   - title-card: swapped in 91f66e3 to MAKE MEMORIES design
+//   - tamagotchi: swapped to 두쫀쿠 mask design (no longer a tamagotchi pet)
 const PASSTHROUGH_FRAMES: string[] = [];
 
 const ALPHA_THRESHOLD = 128;

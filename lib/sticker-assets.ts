@@ -47,12 +47,12 @@ const PIXEL_DIR = "/stickers/pixel";
 
 /**
  * Pixel-art emoji palette extracted from the Gemini sticker sheet via
- * `scripts/split-pixel-emoji.mjs`. 18 transparent PNGs under
+ * `scripts/split-pixel-emoji.mjs`. Transparent PNGs under
  * `/public/stickers/pixel/` — composer + picker render `iconSrc` as a
  * crisp pixelated `<img>` rather than the Unicode glyph.
  *
- * The source sheet had two duplicate sparkle-stars; only one is kept
- * (emoji-06). 18 entries → 2 pages of 12 in the paginated picker.
+ * emoji-07 slot was originally a duplicate sparkle-star and skipped; it is
+ * now reused for the 두쫀쿠 dessert pixel-art emoji.
  */
 export const EMOJI_STICKERS: ReadonlyArray<EmojiSticker> = [
   { id: "em-finger-point", iconSrc: `${PIXEL_DIR}/emoji-01.png`, label: "가리키는 손" },
@@ -61,6 +61,7 @@ export const EMOJI_STICKERS: ReadonlyArray<EmojiSticker> = [
   { id: "em-heart", iconSrc: `${PIXEL_DIR}/emoji-04.png`, label: "하트" },
   { id: "em-comet", iconSrc: `${PIXEL_DIR}/emoji-05.png`, label: "혜성" },
   { id: "em-star", iconSrc: `${PIXEL_DIR}/emoji-06.png`, label: "반짝이는 별" },
+  { id: "em-doojjonkoo", iconSrc: `${PIXEL_DIR}/emoji-07.png`, label: "두쫀쿠" },
   { id: "em-paw", iconSrc: `${PIXEL_DIR}/emoji-08.png`, label: "발바닥" },
   { id: "em-bubble", iconSrc: `${PIXEL_DIR}/emoji-09.png`, label: "비눗방울" },
   { id: "em-cursor", iconSrc: `${PIXEL_DIR}/emoji-10.png`, label: "커서" },

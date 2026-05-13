@@ -17,8 +17,8 @@ export const FRAMES: ReadonlyArray<Frame> = [
   {
     id: "tamagotchi",
     src: "/frames/processed/tamagotchi.png",
-    label: "두쫀쿠 탈",
-    labelEn: "Doo-jjon-koo mask",
+    label: "9기의 최애 디저트(?)",
+    labelEn: "9th-gen favorite dessert (?)",
     tagline: "9기 하면 두쫀쿠지~",
     gridIndex: 0,
   },

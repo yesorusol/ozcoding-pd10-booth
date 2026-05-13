@@ -119,7 +119,7 @@ export async function composeOverlaySheet(
     ctx.restore();
   }
 
-  await paintHeader(ctx);
+  paintHeader(ctx);
   paintFooter(ctx);
   paintCornerSparkles(ctx);
 
@@ -173,7 +173,7 @@ async function paintBackground(
   }
 }
 
-async function paintHeader(ctx: CanvasRenderingContext2D): Promise<void> {
+function paintHeader(ctx: CanvasRenderingContext2D): void {
   const h = NORMAL_HEADER_HEIGHT;
   const pixelFamily = getPixelFontFamily();
 
@@ -182,30 +182,14 @@ async function paintHeader(ctx: CanvasRenderingContext2D): Promise<void> {
   ctx.textAlign = "center";
 
   // Korean headline — large pixel text with white outline for legibility.
-  // A pixel heart sits to the right of "추억남기기"; recenter the text+heart
-  // pair so the optical center stays on the sheet's midline.
+  // " ♥" is appended so the heart renders in the same DotGothic16 pixel
+  // font as the rest of the headline (no separate image).
   ctx.font = `44px ${pixelFamily}`;
-  const krWidth = ctx.measureText(HEADLINE_KR).width;
-  const heartH = 50;
-  const heartW = Math.round(heartH * (247 / 210));
-  const heartGap = 10;
-  const krCenter = NORMAL_SHEET_WIDTH / 2 - (heartGap + heartW) / 2;
-  const krY = h / 2 - 14;
-  drawOutlinedText(ctx, HEADLINE_KR, krCenter, krY, {
+  drawOutlinedText(ctx, `${HEADLINE_KR} ♥`, NORMAL_SHEET_WIDTH / 2, h / 2 - 14, {
     fill: FRAME_NAVY,
     stroke: "#ffffff",
     strokeWidth: 8,
   });
-  try {
-    const heart = await loadPatternImage("/stickers/pixel/emoji-04.png");
-    const heartX = krCenter + krWidth / 2 + heartGap;
-    const heartY = krY - heartH / 2;
-    ctx.imageSmoothingEnabled = false;
-    ctx.drawImage(heart, heartX, heartY, heartW, heartH);
-    ctx.imageSmoothingEnabled = true;
-  } catch {
-    /* heart load failure: skip, headline still renders */
-  }
 
   // English subline — smaller pixel text, same outline.
   ctx.font = `20px ${pixelFamily}`;

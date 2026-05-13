@@ -173,7 +173,7 @@ export async function composeSheet(
   // 3. Cell 7 — title cell. The chosen bg bleeds through the cell; we
   //    paint the headline + sublines on top. Text colors flip with bg
   //    darkness so the same treatment reads on navy or cream.
-  paintTitleCell(ctx, background);
+  await paintTitleCell(ctx, background);
 
   return new Promise<Blob>((resolve, reject) => {
     canvas.toBlob((blob) => {
@@ -224,10 +224,10 @@ async function paintBackground(
   }
 }
 
-function paintTitleCell(
+async function paintTitleCell(
   ctx: CanvasRenderingContext2D,
   bg: BackgroundChoice,
-): void {
+): Promise<void> {
   const { x, y } = cellRect(TITLE_FRAME.gridIndex);
   const w = SHEET_CELL_W;
   const h = SHEET_CELL_H;
@@ -242,14 +242,31 @@ function paintTitleCell(
   ctx.textAlign = "center";
 
   // Korean headline — vertically centered in the cell, outlined navy +
-  // white halo (auto-inverted on dark bg).
+  // white halo (auto-inverted on dark bg). A pixel heart sits to the right
+  // of the text; the text+heart pair is recentered so the optical balance
+  // stays centered.
   const cy = y + h / 2;
   ctx.font = `50px ${pixelFamily}`;
-  drawOutlinedText(ctx, HEADLINE_KR, cx, cy - 20, {
+  const krWidth = ctx.measureText(HEADLINE_KR).width;
+  const heartH = 60;
+  const heartW = Math.round(heartH * (247 / 210));
+  const heartGap = 12;
+  const krCenter = cx - (heartGap + heartW) / 2;
+  drawOutlinedText(ctx, HEADLINE_KR, krCenter, cy - 20, {
     fill,
     stroke,
     strokeWidth: 9,
   });
+  try {
+    const heart = await loadPatternImage("/stickers/pixel/emoji-04.png");
+    const heartX = krCenter + krWidth / 2 + heartGap;
+    const heartY = cy - 20 - heartH / 2;
+    ctx.imageSmoothingEnabled = false;
+    ctx.drawImage(heart, heartX, heartY, heartW, heartH);
+    ctx.imageSmoothingEnabled = true;
+  } catch {
+    /* heart load failure: skip, headline still renders */
+  }
 
   // English subline directly below the KR headline.
   ctx.font = `20px ${pixelFamily}`;

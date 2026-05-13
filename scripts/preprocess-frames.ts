@@ -56,7 +56,7 @@ const FRAME_SCALES: Record<
   string,
   { factor: number; anchor?: "center" | "top" }
 > = {
-  cosplay: { factor: 1.25, anchor: "top" },
+  cosplay: { factor: 1.25, anchor: "center" },
 };
 
 interface AlphaBbox {

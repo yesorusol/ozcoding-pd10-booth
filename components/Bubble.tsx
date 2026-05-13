@@ -51,16 +51,27 @@ export function Bubble({
     >
       {children}
       {tail ? (
-        // 꼬리: 회전된 정사각형 절반을 clip-path로 깔끔히 자름. 이전 135deg
-        // 그라데이션 50%/50% 컷이 안티앨리어싱 경계선으로 보이던 문제 해소.
-        <span
+        // 꼬리: SVG path로 단일 삼각형 그려서 회전+clip-path 조합의 잔여
+        // 안티앨리어싱 선 / 베이스라인 단절 문제를 한 번에 해소.
+        // 삼각형 윗변이 말풍선 바닥선과 자연스럽게 이어지도록 -bottom-px로
+        // 1px만 겹쳐서 borders가 연결돼 보이게 함.
+        <svg
           aria-hidden="true"
           data-testid="bubble-tail"
-          className="absolute -bottom-4 left-6 h-6 w-6 rotate-45 border-b border-l border-cabinet-frame bg-white"
-          style={{
-            clipPath: "polygon(0 0, 0 100%, 100% 100%)",
-          }}
-        />
+          width="22"
+          height="18"
+          viewBox="0 0 22 18"
+          className="absolute -bottom-[17px] left-7 text-cabinet-frame"
+          style={{ overflow: "visible" }}
+        >
+          <path
+            d="M 0 0 L 22 0 L 0 18 Z"
+            fill="#ffffff"
+            stroke="currentColor"
+            strokeWidth="1"
+            strokeLinejoin="miter"
+          />
+        </svg>
       ) : null}
     </div>
   );

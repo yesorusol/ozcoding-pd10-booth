@@ -46,12 +46,17 @@ const PASSTHROUGH_FRAMES: string[] = [];
 const ALPHA_THRESHOLD = 128;
 
 // Per-frame zoom applied after width-normalize, before 800×900 pad.
-// >1.0 scales the 720×900 artwork up and center-crops back to 720×900,
-// enlarging features (e.g. face holes) at the cost of edge clipping.
-// Reason: cosplay frame's two face holes sit close to the canvas edges,
-// making it hard for users to align faces; a small zoom enlarges the holes.
-const FRAME_SCALES: Record<string, number> = {
-  cosplay: 1.15,
+// >1.0 scales the 720×900 artwork up and crops back to 720×900, enlarging
+// features (e.g. face holes) at the cost of edge clipping.
+//   - factor: scale multiplier (1.0 = no-op)
+//   - anchor: which edge to preserve when cropping ("center" | "top")
+//     "top" crops only from the bottom — useful when the top of the artwork
+//     (e.g. princess hair) must not be clipped.
+const FRAME_SCALES: Record<
+  string,
+  { factor: number; anchor?: "center" | "top" }
+> = {
+  cosplay: { factor: 1.25, anchor: "top" },
 };
 
 interface AlphaBbox {
@@ -187,19 +192,21 @@ export async function normalizeArtworkWidth(input: Buffer): Promise<Buffer> {
 }
 
 /**
- * Scale a 720×900 artwork by `factor` (>1 zooms in) and center-crop back
- * to 720×900. Used for frames whose features (e.g. face holes) need to be
- * proportionally larger relative to the canvas.
+ * Scale a 720×900 artwork by `factor` (>1 zooms in) and crop back to
+ * 720×900. `anchor` selects the crop reference: "center" trims equally
+ * from all sides; "top" keeps the top row and only trims the bottom
+ * (preserves top-aligned features like hair / headwear).
  */
 export async function scaleArtwork(
   input: Buffer,
   factor: number,
+  anchor: "center" | "top" = "center",
 ): Promise<Buffer> {
   if (factor === 1) return input;
   const newW = Math.round(RAW_WIDTH * factor);
   const newH = Math.round(RAW_HEIGHT * factor);
   const left = Math.floor((newW - RAW_WIDTH) / 2);
-  const top = Math.floor((newH - RAW_HEIGHT) / 2);
+  const top = anchor === "top" ? 0 : Math.floor((newH - RAW_HEIGHT) / 2);
   return sharp(input)
     .resize({ width: newW, height: newH, fit: "fill" })
     .extract({ left, top, width: RAW_WIDTH, height: RAW_HEIGHT })
@@ -235,7 +242,12 @@ async function main(): Promise<void> {
     const raw = await fs.readFile(srcPath);
     const thresholded = await thresholdAlpha(raw);
     const normalized = await normalizeArtworkWidth(thresholded);
-    const scaled = await scaleArtwork(normalized, FRAME_SCALES[name] ?? 1);
+    const spec = FRAME_SCALES[name];
+    const scaled = await scaleArtwork(
+      normalized,
+      spec?.factor ?? 1,
+      spec?.anchor ?? "center",
+    );
     const padded = await padTo800x900(scaled);
     const outPath = path.join(OUT_DIR, `${name}.png`);
     await fs.writeFile(outPath, padded);

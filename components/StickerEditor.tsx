@@ -437,7 +437,7 @@ export function StickerEditor({
       {/* Side panel (right / bottom) */}
       <aside
         data-testid="sticker-panel"
-        className="flex w-full shrink-0 flex-col border-t-2 border-cabinet-frame bg-white/80 md:h-full md:w-80 md:border-l-2 md:border-t-0"
+        className="flex w-full shrink-0 flex-col border-t border-cabinet-frame bg-white/80 md:h-full md:w-80 md:border-l md:border-t-0"
       >
         <header
           className="border-b border-cabinet-frame/30 px-4 py-2"

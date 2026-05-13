@@ -88,10 +88,10 @@ describe("M1: processed frame PNGs", () => {
 
   it("artwork pixels (non-hole) remain opaque in character frames", async () => {
     // Frame art should be opaque outside the face hole.
-    // burger top-left artwork area (well outside hole): ~(60,60) in processed coords
-    // (60-40=20 in raw, which is frame border art)
+    // burger split-bun design centers the top bun horizontally — sample
+    // (400,80) which sits on the bun itself, well above the face hole.
     const { data } = await sharp(path.join(PROC_DIR, "burger.png"))
-      .extract({ left: 60, top: 60, width: 1, height: 1 })
+      .extract({ left: 400, top: 80, width: 1, height: 1 })
       .raw()
       .toBuffer({ resolveWithObject: true });
     expect(data[3]).toBeGreaterThan(200); // should be opaque artwork

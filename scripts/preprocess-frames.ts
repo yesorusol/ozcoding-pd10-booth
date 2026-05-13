@@ -26,7 +26,6 @@ const RAW_HEIGHT = 900;
 const PAD_TARGET_WIDTH = 800;
 
 const CHARACTER_FRAMES = [
-  "burger",
   "ramen",
   "tamagotchi",
   "teeth",
@@ -35,6 +34,10 @@ const CHARACTER_FRAMES = [
   "waiter",
 ];
 
+// burger.png was hand-swapped to a new split-bun cutout (commit 70a54ae)
+// without updating raw/burger.png. Re-running preprocess against the stale
+// raw file overwrites the good processed image, so it is skipped here until
+// a fresh raw source matching the cutout design is committed.
 const PASSTHROUGH_FRAMES = ["title-card"];
 
 const ALPHA_THRESHOLD = 128;

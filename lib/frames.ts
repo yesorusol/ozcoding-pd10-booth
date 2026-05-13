@@ -49,7 +49,7 @@ export const FRAMES: ReadonlyArray<Frame> = [
   {
     id: "waiter",
     src: "/frames/processed/waiter.png",
-    label: "오늘의 매뉴 등장!",
+    label: "오늘의 메뉴 등장!",
     labelEn: "Today's menu!",
     tagline: "오늘 등장한 주인공은 바로 당신!",
     gridIndex: 4,

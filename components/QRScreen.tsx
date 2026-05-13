@@ -146,7 +146,7 @@ export function QRScreen({
             <Link
               href={challengeHref}
               data-testid="challenge-funnel-button"
-              className="flex h-14 w-72 items-center justify-center gap-2 rounded-full border border-cabinet-frame bg-btn-blue py-3 font-marquee text-xl tracking-wide text-white shadow-soft transition active:translate-y-px"
+              className="flex h-14 w-72 items-center justify-center gap-2 rounded-full border border-cabinet-frame bg-btn-blue py-3 font-marquee text-xl tracking-wide text-cabinet-frame shadow-soft transition active:translate-y-px"
             >
               <span>챌린지 사진 도전</span>
               <span aria-hidden>→</span>

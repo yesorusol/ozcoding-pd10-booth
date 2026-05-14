@@ -34,8 +34,10 @@ import { useCamera, type CameraStatus } from "@/lib/use-camera";
 import { CAPTURE_FRAMES, FRAMES } from "@/lib/frames";
 import { COPY } from "@/lib/copy";
 import {
-  reducer,
-  initialState,
+  createInitialState,
+  createReducer,
+  THEMED_CUTS,
+  THEMED_COUNTDOWN_START,
   TOTAL_CUTS,
   FLASH_MS,
   PREVIEW_MS,
@@ -65,11 +67,13 @@ function cameraErrorKindFor(status: CameraStatus): CameraErrorKind | null {
   return null;
 }
 
+const themedReducer = createReducer(THEMED_CUTS, THEMED_COUNTDOWN_START);
+
 export function ThemedFlow() {
   const router = useRouter();
   const camera = useCamera();
-  const [state, dispatch] = useReducer(reducer, undefined, () => ({
-    ...initialState,
+  const [state, dispatch] = useReducer(themedReducer, undefined, () => ({
+    ...createInitialState(THEMED_CUTS),
     phase: "camera-priming" as const,
   }));
 
@@ -382,7 +386,7 @@ export function ThemedFlow() {
 
   return (
     <ScaleToFit>
-      <CabinetChrome fill={false}>
+      <CabinetChrome fill={false} notesItems={COPY.notes.itemsThemed}>
         {state.phase === "camera-priming-error" && state.errorKind ? (
           <div className="flex min-h-[24rem] items-center justify-center">
             <CameraDeniedBanner

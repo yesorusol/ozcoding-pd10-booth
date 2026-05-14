@@ -37,6 +37,8 @@ export const THEMED_CUTS = 7;
 export const NORMAL_CUTS = 4;
 export const TOTAL_CUTS = THEMED_CUTS;
 export const COUNTDOWN_START = 3;
+/** Challenge (themed 7-cut) flow gives extra time per cut. */
+export const THEMED_COUNTDOWN_START = 5;
 /** Single 200ms full-white flash. Below the 5Hz epilepsy threshold. */
 export const FLASH_MS = 200;
 /** Frozen captured-cut preview hold before next countdown. */
@@ -91,7 +93,10 @@ export type Action =
 
 // ─── Reducer ────────────────────────────────────────────────────────────────
 
-export function createReducer(totalCuts: number) {
+export function createReducer(
+  totalCuts: number,
+  countdownStart: number = COUNTDOWN_START,
+) {
   const baseInitial = createInitialState(totalCuts);
   return function reducerImpl(
     state: SessionMachineState,
@@ -123,7 +128,7 @@ export function createReducer(totalCuts: number) {
         return {
           ...state,
           phase: "countdown",
-          countdown: COUNTDOWN_START,
+          countdown: countdownStart,
         };
       }
       case "CAMERA_DENIED": {
@@ -170,7 +175,7 @@ export function createReducer(totalCuts: number) {
           ...state,
           phase: "countdown",
           cutIndex: next,
-          countdown: COUNTDOWN_START,
+          countdown: countdownStart,
         };
       }
       case "COMPOSE_DONE": {

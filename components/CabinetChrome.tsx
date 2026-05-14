@@ -27,12 +27,19 @@ interface CabinetChromeProps {
    * wrapped by `<ScaleToFit>`.
    */
   fill?: boolean;
+  /**
+   * Override the 주의사항 panel lines. Defaults to `COPY.notes.items` (3초
+   * countdown — normal 4-cut mode). Themed/challenge surfaces should pass
+   * `COPY.notes.itemsThemed` (5초).
+   */
+  notesItems?: ReadonlyArray<string>;
 }
 
 export function CabinetChrome({
   children,
   hideBottom,
   fill = true,
+  notesItems,
 }: CabinetChromeProps) {
   return (
     <div
@@ -58,7 +65,7 @@ export function CabinetChrome({
           {!hideBottom ? (
             <>
               <CabinetKeyboard />
-              <CabinetFooter />
+              <CabinetFooter notesItems={notesItems} />
             </>
           ) : null}
         </div>
@@ -237,20 +244,25 @@ function FnKey({ color, children }: { color: string; children: ReactNode }) {
 // Footer
 // ─────────────────────────────────────────────────────────────────────────────
 
-function CabinetFooter() {
+function CabinetFooter({
+  notesItems,
+}: {
+  notesItems?: ReadonlyArray<string>;
+}) {
   return (
     <div
       data-testid="cabinet-footer"
       className="grid shrink-0 grid-cols-1 items-stretch gap-2 sm:grid-cols-[1.5fr_0.9fr_1fr] sm:gap-3"
     >
-      <NotesPanel />
+      <NotesPanel items={notesItems} />
       <StatusLeds />
       <OutputSlot />
     </div>
   );
 }
 
-function NotesPanel() {
+function NotesPanel({ items }: { items?: ReadonlyArray<string> }) {
+  const lines = items ?? COPY.notes.items;
   return (
     <div
       data-testid="cabinet-notes"
@@ -264,7 +276,7 @@ function NotesPanel() {
         {COPY.notes.title}
       </div>
       <ul className="space-y-0 font-body text-[10px] leading-snug text-cabinet-frame sm:text-[11px]">
-        {COPY.notes.items.map((line) => (
+        {lines.map((line) => (
           <li key={line} className="whitespace-nowrap">
             {line}
           </li>

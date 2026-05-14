@@ -15,7 +15,7 @@ import { CAPTURE_FRAMES } from "@/lib/frames";
 export default function ThemedHomePage() {
   return (
     <ScaleToFit>
-      <CabinetChrome fill={false}>
+      <CabinetChrome fill={false} notesItems={COPY.notes.itemsThemed}>
         <IdleScreen />
       </CabinetChrome>
     </ScaleToFit>

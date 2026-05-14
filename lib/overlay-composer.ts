@@ -184,7 +184,7 @@ function paintHeader(ctx: CanvasRenderingContext2D): void {
   // Korean headline — large pixel text with white outline for legibility.
   // " ♥" is appended so the heart renders in the same DotGothic16 pixel
   // font as the rest of the headline (no separate image).
-  ctx.font = `44px ${pixelFamily}`;
+  ctx.font = `40px ${pixelFamily}`;
   drawOutlinedText(ctx, `${HEADLINE_KR} ♥`, NORMAL_SHEET_WIDTH / 2, h / 2 - 14, {
     fill: FRAME_NAVY,
     stroke: "#ffffff",

@@ -185,15 +185,15 @@ function paintHeader(ctx: CanvasRenderingContext2D): void {
   // " ♥" is appended so the heart renders in the same DotGothic16 pixel
   // font as the rest of the headline (no separate image).
   ctx.font = `40px ${pixelFamily}`;
-  drawOutlinedText(ctx, `${HEADLINE_KR} ♥`, NORMAL_SHEET_WIDTH / 2, h / 2 - 14, {
+  drawOutlinedText(ctx, `${HEADLINE_KR} ♥`, NORMAL_SHEET_WIDTH / 2, h / 2 - 18, {
     fill: FRAME_NAVY,
     stroke: "#ffffff",
     strokeWidth: 8,
   });
 
   // English subline — smaller pixel text, same outline.
-  ctx.font = `20px ${pixelFamily}`;
-  drawOutlinedText(ctx, HEADLINE_EN, NORMAL_SHEET_WIDTH / 2, h / 2 + 22, {
+  ctx.font = `24px ${pixelFamily}`;
+  drawOutlinedText(ctx, HEADLINE_EN, NORMAL_SHEET_WIDTH / 2, h / 2 + 30, {
     fill: FRAME_NAVY,
     stroke: "#ffffff",
     strokeWidth: 5,

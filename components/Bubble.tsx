@@ -51,25 +51,30 @@ export function Bubble({
     >
       {children}
       {tail ? (
-        // 꼬리: SVG path로 단일 삼각형 그려서 회전+clip-path 조합의 잔여
-        // 안티앨리어싱 선 / 베이스라인 단절 문제를 한 번에 해소.
-        // 삼각형 윗변이 말풍선 바닥선과 자연스럽게 이어지도록 -bottom-px로
-        // 1px만 겹쳐서 borders가 연결돼 보이게 함.
+        // 꼬리: 채움(fill)과 외곽선(stroke)을 분리. 채움은 1px 위쪽으로 더
+        // 끌어올려 말풍선 바닥선을 가리고, 외곽선은 두 옆면만 그려서 윗변에
+        // 가로 선이 보이지 않도록 함. 결과: 꼬리 입구가 말풍선과 한 몸처럼
+        // 매끄럽게 이어진다.
         <svg
           aria-hidden="true"
           data-testid="bubble-tail"
-          width="22"
-          height="18"
-          viewBox="0 0 22 18"
-          className="absolute -bottom-[17px] left-7 text-cabinet-frame"
+          width="24"
+          height="20"
+          viewBox="0 0 24 20"
+          className="absolute -bottom-[19px] left-6 text-cabinet-frame"
           style={{ overflow: "visible" }}
         >
           <path
-            d="M 0 0 L 22 0 L 0 18 Z"
+            d="M 1 -1 L 23 -1 L 5 19 Z"
             fill="#ffffff"
+          />
+          <path
+            d="M 23 0 L 5 19 L 1 0"
+            fill="none"
             stroke="currentColor"
             strokeWidth="1"
-            strokeLinejoin="miter"
+            strokeLinecap="round"
+            strokeLinejoin="round"
           />
         </svg>
       ) : null}

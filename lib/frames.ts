@@ -17,9 +17,9 @@ export const FRAMES: ReadonlyArray<Frame> = [
   {
     id: "tamagotchi",
     src: "/frames/processed/tamagotchi.png",
-    label: "9기의 최애 디저트(?)",
-    labelEn: "9th-gen favorite dessert (?)",
-    tagline: "9기 하면 두쫀쿠지~",
+    label: "10기의 최애 디저트(?)",
+    labelEn: "10th-gen favorite dessert (?)",
+    tagline: "10기 하면 두쫀쿠지~",
     gridIndex: 0,
   },
   {
@@ -35,7 +35,7 @@ export const FRAMES: ReadonlyArray<Frame> = [
     src: "/frames/processed/burger.png",
     label: "버거 타임",
     labelEn: "Burger time",
-    tagline: "패티 9기~ 완성~",
+    tagline: "패티 10기~ 완성~",
     gridIndex: 2,
   },
   {
@@ -57,9 +57,9 @@ export const FRAMES: ReadonlyArray<Frame> = [
   {
     id: "cosplay",
     src: "/frames/processed/cosplay.png",
-    label: "프린세스 9기~",
-    labelEn: "Princess 9!",
-    tagline: "프린세스 9기~",
+    label: "프린세스 10기~",
+    labelEn: "Princess 10!",
+    tagline: "프린세스 10기~",
     gridIndex: 5,
   },
   {
@@ -73,9 +73,9 @@ export const FRAMES: ReadonlyArray<Frame> = [
   {
     id: "title-card",
     src: "/frames/processed/title-card.png",
-    label: "PD09",
-    labelEn: "PD09 Networking Day",
-    tagline: "OZCODING PD09 네트워킹 데이",
+    label: "PD10",
+    labelEn: "PD10 Networking Day",
+    tagline: "OZCODING PD10 네트워킹 데이",
     gridIndex: 7,
   },
 ] as const;

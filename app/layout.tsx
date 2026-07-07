@@ -27,8 +27,8 @@ const pixelFont = DotGothic16({
 });
 
 export const metadata: Metadata = {
-  title: "OZCODING PD09 부스",
-  description: "PD09 네트워킹 데이 Y2K 포토부스",
+  title: "OZCODING PD10 부스",
+  description: "PD10 네트워킹 데이 Y2K 포토부스",
 };
 
 export default function RootLayout({

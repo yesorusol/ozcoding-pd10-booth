@@ -8,7 +8,7 @@
  *     each rotated, with a thicker bottom border classic-polaroid style.
  *     The cell's photo area is `transparent` so composited photos show
  *     through under runtime composition.
- *   • A `♡ OZCODING PD09 ♡` caption at the bottom-center.
+ *   • A `♡ OZCODING PD10 ♡` caption at the bottom-center.
  *
  * Designer is expected to replace this asset with the final artwork.
  */
@@ -20,7 +20,7 @@ import sharp from "sharp";
 const SHEET_WIDTH = 1080;
 const SHEET_HEIGHT = 1440;
 const BACKGROUND = "#f8f4e8";
-const CAPTION = "♡ OZCODING PD09 ♡";
+const CAPTION = "♡ OZCODING PD10 ♡";
 const CAPTION_COLOR = "#9b8e76";
 
 interface PolaroidCell {

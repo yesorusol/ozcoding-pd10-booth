@@ -1,6 +1,6 @@
 /**
  * lib/types.ts — Shared TypeScript types, interfaces, and runtime constants
- * used across every milestone of the OZCODING PD09 photobooth.
+ * used across every milestone of the OZCODING PD10 photobooth.
  *
  * Design notes:
  * - `tunnel-host-error` is an idle-timer eligible state (per consensus follow-up):

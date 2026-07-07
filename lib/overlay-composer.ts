@@ -39,9 +39,9 @@ export interface OverlayComposerOptions {
   background?: BackgroundChoice;
 }
 
-const HEADLINE_KR = "9기와 추억남기기";
-const HEADLINE_EN = "OZCODING PD09 NETWORKING DAY";
-const FOOTER_TEXT = "2026.05.14 ⋆ MAKE MEMORIES ⋆ #PD09";
+const HEADLINE_KR = "10기와 추억남기기";
+const HEADLINE_EN = "OZCODING PD10 NETWORKING DAY";
+const FOOTER_TEXT = "2026.07.09 ⋆ MAKE MEMORIES ⋆ #PD10";
 
 const FRAME_NAVY = "#1d2c4a";
 const ACCENT_YELLOW = "#fff36b";

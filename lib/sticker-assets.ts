@@ -28,6 +28,10 @@ export const CHARACTER_STICKERS: ReadonlyArray<StickerAsset> = [
   { id: "char-08", src: `${CHARS_DIR}/char-08.png`, label: "플레임 - 주황 불꽃머리" },
   { id: "char-09", src: `${CHARS_DIR}/char-09.png`, label: "갓-블루 - 검은갓 한복풍 파랑옷 안경" },
   { id: "char-10", src: `${CHARS_DIR}/char-10.png`, label: "갓-레드 - 한복풍 빨간옷" },
+  { id: "char-11", src: `${CHARS_DIR}/char-11.png`, label: "블루브레이즈 - 파란 브레이즈 안경 파랑옷" },
+  { id: "char-12", src: `${CHARS_DIR}/char-12.png`, label: "핑크베레 - 핑크 베레모 라일락 옷" },
+  { id: "char-13", src: `${CHARS_DIR}/char-13.png`, label: "축구공헤드 - 축구공 머리 빨강티" },
+  { id: "char-14", src: `${CHARS_DIR}/char-14.png`, label: "카우보이 - 갈색 카우보이햇 수염" },
 ];
 
 export type EmojiSticker = {

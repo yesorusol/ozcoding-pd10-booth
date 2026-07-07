@@ -36,8 +36,8 @@ export function MarqueeSign() {
           {headline}
         </span>
         <span className="font-marquee text-2xl text-cabinet-frame sm:text-3xl md:text-4xl">
-          {/* Black Han Sans 숫자가 letters보다 cap-height가 낮아 'PD09'에서
-              '09'가 작아 보임 → letter/digit 분리하고 digits만 1.15em로 키움. */}
+          {/* Black Han Sans 숫자가 letters보다 cap-height가 낮아 'PD10'에서
+              '10'이 작아 보임 → letter/digit 분리하고 digits만 1.15em로 키움. */}
           {(() => {
             const match = headlineSuffix.match(/^([^\d]*)(\d+.*)$/);
             if (!match) return headlineSuffix;

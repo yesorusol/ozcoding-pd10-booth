@@ -16,21 +16,21 @@ export const COPY = {
     /** 노란 타원 안에 굵게 박히는 메인 워드마크 */
     headline: "OZCODING",
     /** 워드마크 옆 보조 단어 */
-    headlineSuffix: "PD09",
+    headlineSuffix: "PD10",
     /** 초록 띠 안의 한국어 자막 */
-    subtitleKr: "PD09 네트워킹 데이 포토부스",
+    subtitleKr: "PD10 네트워킹 데이 포토부스",
     /** 그 아래 영문 자막 */
     subtitleEn: "Networking Day Photobooth",
   },
 
   // ──────────────────────────────────────────────────────────────────────────
-  // 온보딩(첫 진입) 화면 — `/`에 노출. 같은 캐비닛 톤앤매너에 PD09 9기 카피.
+  // 온보딩(첫 진입) 화면 — `/`에 노출. 같은 캐비닛 톤앤매너에 PD10 10기 카피.
   // ──────────────────────────────────────────────────────────────────────────
   onboarding: {
     /** 노란 배너 한국어 헤드라인 */
-    headlineKr: "9기와 추억남기기",
+    headlineKr: "10기와 추억남기기",
     /** 노란 배너 영문 헤드라인 */
-    headlineEn: "Make memories with PD09",
+    headlineEn: "Make memories with PD10",
     /** /themed 의 frame-menu 패턴을 따른 번호 매긴 단계 리스트 — 캐비닛 안 시각 비중을 채워 비율을 맞춤 */
     steps: [
       { titleKr: "4컷 자동 촬영", titleEn: "Auto 4-cut capture" },

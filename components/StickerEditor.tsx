@@ -465,7 +465,7 @@ export function StickerEditor({
                   pageStart + BACKGROUND_PATTERNS_PAGE_SIZE
                 );
                 return (
-                  <div className="mb-3">
+                  <div className="group mb-3">
                     <div className="mb-2 flex items-center justify-between">
                       <p className="font-body text-xs font-bold text-cabinet-frame">
                         배경 패턴
@@ -479,7 +479,7 @@ export function StickerEditor({
                           disabled={clampedPage === 0}
                           aria-label="이전 페이지"
                           data-testid="background-prev"
-                          className="flex h-5 w-5 items-center justify-center rounded border border-cabinet-frame/40 bg-white font-marquee text-xs text-cabinet-frame transition active:scale-95 disabled:opacity-30"
+                          className="flex h-6 w-6 items-center justify-center rounded-full border border-cabinet-frame/40 bg-white font-marquee text-sm text-cabinet-frame shadow-soft transition active:scale-95 disabled:!opacity-30 [@media(hover:hover)]:scale-90 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:scale-100 [@media(hover:hover)]:group-hover:opacity-100 [@media(hover:hover)]:focus-visible:opacity-100"
                         >
                           ‹
                         </button>
@@ -496,7 +496,7 @@ export function StickerEditor({
                           disabled={clampedPage === totalBgPages - 1}
                           aria-label="다음 페이지"
                           data-testid="background-next"
-                          className="flex h-5 w-5 items-center justify-center rounded border border-cabinet-frame/40 bg-white font-marquee text-xs text-cabinet-frame transition active:scale-95 disabled:opacity-30"
+                          className="flex h-6 w-6 items-center justify-center rounded-full border border-cabinet-frame/40 bg-white font-marquee text-sm text-cabinet-frame shadow-soft transition active:scale-95 disabled:!opacity-30 [@media(hover:hover)]:scale-90 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:scale-100 [@media(hover:hover)]:group-hover:opacity-100 [@media(hover:hover)]:focus-visible:opacity-100"
                         >
                           ›
                         </button>
@@ -592,7 +592,7 @@ export function StickerEditor({
                   addText();
                 }
               }}
-              placeholder="열쩡 구긔!!"
+              placeholder="우주최강 식끼!"
               maxLength={MAX_TEXT_LENGTH}
               data-testid="text-sticker-input"
               className="w-full rounded border border-cabinet-frame/40 bg-white px-2 py-1 font-body text-sm text-cabinet-frame outline-none focus:border-cabinet-frame"
@@ -663,7 +663,7 @@ export function StickerEditor({
               pageStart + EMOJI_PAGE_SIZE
             );
             return (
-              <>
+              <div className="group">
                 <div className="mb-3 mt-2 flex items-center justify-between">
                   <p className="font-body text-xs font-bold text-cabinet-frame">
                     이모지
@@ -677,7 +677,7 @@ export function StickerEditor({
                       disabled={clampedPage === 0}
                       aria-label="이전 페이지"
                       data-testid="emoji-prev"
-                      className="flex h-5 w-5 items-center justify-center rounded border border-cabinet-frame/40 bg-white font-marquee text-xs text-cabinet-frame transition active:scale-95 disabled:opacity-30"
+                      className="flex h-6 w-6 items-center justify-center rounded-full border border-cabinet-frame/40 bg-white font-marquee text-sm text-cabinet-frame shadow-soft transition active:scale-95 disabled:!opacity-30 [@media(hover:hover)]:scale-90 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:scale-100 [@media(hover:hover)]:group-hover:opacity-100 [@media(hover:hover)]:focus-visible:opacity-100"
                     >
                       ‹
                     </button>
@@ -694,7 +694,7 @@ export function StickerEditor({
                       disabled={clampedPage === totalEmojiPages - 1}
                       aria-label="다음 페이지"
                       data-testid="emoji-next"
-                      className="flex h-5 w-5 items-center justify-center rounded border border-cabinet-frame/40 bg-white font-marquee text-xs text-cabinet-frame transition active:scale-95 disabled:opacity-30"
+                      className="flex h-6 w-6 items-center justify-center rounded-full border border-cabinet-frame/40 bg-white font-marquee text-sm text-cabinet-frame shadow-soft transition active:scale-95 disabled:!opacity-30 [@media(hover:hover)]:scale-90 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:scale-100 [@media(hover:hover)]:group-hover:opacity-100 [@media(hover:hover)]:focus-visible:opacity-100"
                     >
                       ›
                     </button>
@@ -740,7 +740,7 @@ export function StickerEditor({
                     )
                   )}
                 </div>
-              </>
+              </div>
             );
           })()}
         </div>

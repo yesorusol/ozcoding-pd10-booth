@@ -44,6 +44,7 @@ import {
 } from "@/lib/background-assets";
 
 const EMOJI_PAGE_SIZE = 12;
+const EMOJI_PAGE_SIZE_SPACIOUS = 15;
 
 /** Perceived-brightness check (ITU-R BT.601). Used to pick the check-mark
  * color on color swatches so it stays legible against any swatch fill. */
@@ -136,6 +137,13 @@ export function StickerEditor({
   };
   const transformingIdRef = useRef<string | null>(null);
   const transformStartRef = useRef<TransformStart | null>(null);
+
+  // No background section (normal mode has no bg picker anymore) → the
+  // panel loses a whole block of content, so widen it and spread the
+  // remaining sections (bigger gaps/padding, more sticker columns) instead
+  // of leaving a cramped, mostly-empty column.
+  const spacious = !onBackgroundChange;
+  const emojiPageSize = spacious ? EMOJI_PAGE_SIZE_SPACIOUS : EMOJI_PAGE_SIZE;
 
   const addCharacter = useCallback((asset: StickerAsset) => {
     setPlaced((prev) => [
@@ -437,10 +445,14 @@ export function StickerEditor({
       {/* Side panel (right / bottom) */}
       <aside
         data-testid="sticker-panel"
-        className="flex w-full shrink-0 flex-col border-t border-cabinet-frame bg-white/80 md:h-full md:w-80 md:border-l md:border-t-0"
+        className={
+          spacious
+            ? "flex w-full shrink-0 flex-col border-t border-cabinet-frame bg-white/80 md:h-full md:w-[26rem] md:border-l md:border-t-0"
+            : "flex w-full shrink-0 flex-col border-t border-cabinet-frame bg-white/80 md:h-full md:w-80 md:border-l md:border-t-0"
+        }
       >
         <header
-          className="border-b border-cabinet-frame/30 px-4 py-2"
+          className={spacious ? "border-b border-cabinet-frame/30 px-6 py-3" : "border-b border-cabinet-frame/30 px-4 py-2"}
           style={{
             backgroundImage:
               "linear-gradient(180deg, #c4ecb0 0%, #d4f5c0 55%, #ecffd9 100%)",
@@ -450,7 +462,7 @@ export function StickerEditor({
           <p className="font-body text-xs text-cabinet-frame/70">선택해서 사진을 꾸며보세요</p>
         </header>
 
-        <div className="flex-1 overflow-y-auto p-3">
+        <div className={spacious ? "flex-1 overflow-y-auto p-6" : "flex-1 overflow-y-auto p-3"}>
           {onBackgroundChange ? (
             <>
               {showPatterns ? (() => {
@@ -578,10 +590,10 @@ export function StickerEditor({
             </>
           ) : null}
 
-          <p className="mb-3 mt-2 font-body text-xs font-bold text-cabinet-frame">
+          <p className={spacious ? "mb-4 mt-2 font-body text-sm font-bold text-cabinet-frame" : "mb-3 mt-2 font-body text-xs font-bold text-cabinet-frame"}>
             텍스트
           </p>
-          <div className="mb-6">
+          <div className={spacious ? "mb-8" : "mb-6"}>
             <input
               type="text"
               value={textDraft}
@@ -595,14 +607,18 @@ export function StickerEditor({
               placeholder="우주최강 식끼!"
               maxLength={MAX_TEXT_LENGTH}
               data-testid="text-sticker-input"
-              className="w-full rounded border border-cabinet-frame/40 bg-white px-2 py-1 font-body text-sm text-cabinet-frame outline-none focus:border-cabinet-frame"
+              className={
+                spacious
+                  ? "w-full rounded border border-cabinet-frame/40 bg-white px-3 py-2 font-body text-base text-cabinet-frame outline-none focus:border-cabinet-frame"
+                  : "w-full rounded border border-cabinet-frame/40 bg-white px-2 py-1 font-body text-sm text-cabinet-frame outline-none focus:border-cabinet-frame"
+              }
               style={{
                 fontFamily: "var(--font-pixel-display), system-ui, sans-serif",
               }}
             />
             <div
               data-testid="text-sticker-color-grid"
-              className="mt-2 grid grid-cols-8 gap-1"
+              className={spacious ? "mt-3 grid grid-cols-8 gap-2" : "mt-2 grid grid-cols-8 gap-1"}
             >
               {TEXT_STICKER_COLORS.map((c) => (
                 <button
@@ -625,7 +641,11 @@ export function StickerEditor({
               onClick={addText}
               disabled={!textDraft.trim()}
               data-testid="text-sticker-add"
-              className="mt-2 w-full rounded-full border border-cabinet-frame bg-btn-yellow py-2 font-marquee text-base text-cabinet-frame shadow-soft transition active:translate-y-px disabled:cursor-not-allowed disabled:opacity-50"
+              className={
+                spacious
+                  ? "mt-3 w-full rounded-full border border-cabinet-frame bg-btn-yellow py-3 font-marquee text-lg text-cabinet-frame shadow-soft transition active:translate-y-px disabled:cursor-not-allowed disabled:opacity-50"
+                  : "mt-2 w-full rounded-full border border-cabinet-frame bg-btn-yellow py-2 font-marquee text-base text-cabinet-frame shadow-soft transition active:translate-y-px disabled:cursor-not-allowed disabled:opacity-50"
+              }
             >
               텍스트 추가하기
             </button>
@@ -654,18 +674,18 @@ export function StickerEditor({
             ];
             const totalEmojiPages = Math.max(
               1,
-              Math.ceil(merged.length / EMOJI_PAGE_SIZE)
+              Math.ceil(merged.length / emojiPageSize)
             );
             const clampedPage = Math.min(emojiPage, totalEmojiPages - 1);
-            const pageStart = clampedPage * EMOJI_PAGE_SIZE;
+            const pageStart = clampedPage * emojiPageSize;
             const pageItems = merged.slice(
               pageStart,
-              pageStart + EMOJI_PAGE_SIZE
+              pageStart + emojiPageSize
             );
             return (
               <div className="group">
-                <div className="mb-3 mt-2 flex items-center justify-between">
-                  <p className="font-body text-xs font-bold text-cabinet-frame">
+                <div className={spacious ? "mb-4 mt-2 flex items-center justify-between" : "mb-3 mt-2 flex items-center justify-between"}>
+                  <p className={spacious ? "font-body text-sm font-bold text-cabinet-frame" : "font-body text-xs font-bold text-cabinet-frame"}>
                     이모지
                   </p>
                   <div className="flex items-center gap-1">
@@ -702,7 +722,7 @@ export function StickerEditor({
                 </div>
                 <div
                   data-testid="emoji-grid"
-                  className="grid grid-cols-4 gap-2"
+                  className={spacious ? "grid grid-cols-5 gap-3" : "grid grid-cols-4 gap-2"}
                 >
                   {pageItems.map((item) =>
                     item.kind === "char" ? (
@@ -711,7 +731,11 @@ export function StickerEditor({
                         type="button"
                         onClick={() => addCharacter(item.asset)}
                         aria-label={`${item.label} 스티커 추가`}
-                        className="flex aspect-square items-center justify-center overflow-hidden rounded border border-cabinet-frame/40 bg-white p-0.5 transition active:scale-95"
+                        className={
+                          spacious
+                            ? "flex aspect-square items-center justify-center overflow-hidden rounded-lg border border-cabinet-frame/40 bg-white p-1.5 transition active:scale-95"
+                            : "flex aspect-square items-center justify-center overflow-hidden rounded border border-cabinet-frame/40 bg-white p-0.5 transition active:scale-95"
+                        }
                       >
                         <CharacterThumb asset={item.asset} />
                       </button>
@@ -721,7 +745,11 @@ export function StickerEditor({
                         type="button"
                         onClick={() => addEmoji(item.emoji)}
                         aria-label={`${item.label} 스티커 추가`}
-                        className="flex aspect-square items-center justify-center rounded border border-cabinet-frame/40 bg-white p-1 text-2xl transition active:scale-95"
+                        className={
+                          spacious
+                            ? "flex aspect-square items-center justify-center rounded-lg border border-cabinet-frame/40 bg-white p-2 text-3xl transition active:scale-95"
+                            : "flex aspect-square items-center justify-center rounded border border-cabinet-frame/40 bg-white p-1 text-2xl transition active:scale-95"
+                        }
                       >
                         {item.emoji.iconSrc ? (
                           // eslint-disable-next-line @next/next/no-img-element

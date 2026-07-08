@@ -167,6 +167,12 @@
       "type": "file"
     },
     {
+      "path": "lib/overlay-composer.ts",
+      "accessCount": 29,
+      "lastAccessed": 1783480892300,
+      "type": "file"
+    },
+    {
       "path": "components/ThemedFlow.tsx",
       "accessCount": 27,
       "lastAccessed": 1778407279613,
@@ -176,12 +182,6 @@
       "path": "lib/session-machine.ts",
       "accessCount": 26,
       "lastAccessed": 1778422420201,
-      "type": "file"
-    },
-    {
-      "path": "lib/overlay-composer.ts",
-      "accessCount": 24,
-      "lastAccessed": 1783479932044,
       "type": "file"
     },
     {

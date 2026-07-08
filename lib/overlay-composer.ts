@@ -7,6 +7,11 @@
  * each photo is then drawn on top, rounded-rect clipped to tuck under the
  * window's rounded corners (see NORMAL_CELL_RECTS / NORMAL_CELL_RADIUS).
  *
+ * The corner astronaut characters overlap slightly onto each window in the
+ * source artwork, so a photo drawn on top would clip them. `normal-frame-fg.png`
+ * is those overlapping pixels only (rest fully transparent), extracted from
+ * normal-frame.png and redrawn last so the astronauts sit in front of the photos.
+ *
  * Inputs:
  *   - cuts: 4 captured ImageBitmaps in capture order
  *
@@ -31,26 +36,38 @@ export interface OverlayComposerOptions {
 }
 
 const FRAME_SRC = "/overlays/normal-frame.png";
+const FRAME_FG_SRC = "/overlays/normal-frame-fg.png";
+
+function loadImage(src: string): Promise<HTMLImageElement> {
+  return new Promise<HTMLImageElement>((resolve, reject) => {
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.onload = () => resolve(img);
+    img.onerror = (e) => reject(e);
+    img.src = src;
+  });
+}
 
 let frameImagePromise: Promise<HTMLImageElement> | null = null;
+let frameFgImagePromise: Promise<HTMLImageElement> | null = null;
 
 function loadFrameImage(): Promise<HTMLImageElement> {
-  if (!frameImagePromise) {
-    frameImagePromise = new Promise<HTMLImageElement>((resolve, reject) => {
-      const img = new Image();
-      img.crossOrigin = "anonymous";
-      img.onload = () => resolve(img);
-      img.onerror = (e) => reject(e);
-      img.src = FRAME_SRC;
-    });
-  }
+  if (!frameImagePromise) frameImagePromise = loadImage(FRAME_SRC);
   return frameImagePromise;
+}
+
+function loadFrameFgImage(): Promise<HTMLImageElement> {
+  if (!frameFgImagePromise) frameFgImagePromise = loadImage(FRAME_FG_SRC);
+  return frameFgImagePromise;
 }
 
 /** Best-effort eager preload — caller can fire-and-forget at editor open. */
 export function preloadNormalFrameImage(): void {
   void loadFrameImage().catch(() => {
     /* ignore — paintFrame handles failure */
+  });
+  void loadFrameFgImage().catch(() => {
+    /* ignore — paintFrameForeground handles failure */
   });
 }
 
@@ -90,6 +107,8 @@ export async function composeOverlaySheet(
     ctx.restore();
   }
 
+  await paintFrameForeground(ctx);
+
   return new Promise<Blob>((resolve, reject) => {
     canvas.toBlob((blob) => {
       if (blob) resolve(blob);
@@ -105,6 +124,15 @@ async function paintFrame(ctx: CanvasRenderingContext2D): Promise<void> {
   } catch {
     ctx.fillStyle = "#1d2c4a";
     ctx.fillRect(0, 0, NORMAL_SHEET_WIDTH, NORMAL_SHEET_HEIGHT);
+  }
+}
+
+async function paintFrameForeground(ctx: CanvasRenderingContext2D): Promise<void> {
+  try {
+    const img = await loadFrameFgImage();
+    ctx.drawImage(img, 0, 0, NORMAL_SHEET_WIDTH, NORMAL_SHEET_HEIGHT);
+  } catch {
+    /* corner astronauts just won't sit in front of the photo — non-fatal */
   }
 }
 

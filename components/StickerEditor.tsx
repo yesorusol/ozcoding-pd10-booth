@@ -57,6 +57,39 @@ function isHexDark(hex: string): boolean {
   return (r * 299 + g * 587 + b * 114) / 1000 < 140;
 }
 
+/**
+ * Carousel-style page arrow overlaid on the left/right edge of a paginated
+ * grid (not next to the section title). Hidden until the grid is hovered
+ * (desktop/mouse); always visible on touch devices, which report no hover
+ * capability, so the kiosk stays fully usable without a mouse.
+ */
+function EdgeArrow({
+  direction,
+  onClick,
+  disabled,
+  testId,
+}: {
+  direction: "prev" | "next";
+  onClick: () => void;
+  disabled: boolean;
+  testId: string;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      aria-label={direction === "prev" ? "이전 페이지" : "다음 페이지"}
+      data-testid={testId}
+      className={`absolute top-1/2 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-cabinet-frame/40 bg-white font-marquee text-lg text-cabinet-frame shadow-soft transition active:scale-95 disabled:!opacity-0 disabled:pointer-events-none [@media(hover:hover)]:scale-90 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:scale-100 [@media(hover:hover)]:group-hover:opacity-100 [@media(hover:hover)]:focus-visible:opacity-100 ${
+        direction === "prev" ? "left-1" : "right-1"
+      }`}
+    >
+      {direction === "prev" ? "‹" : "›"}
+    </button>
+  );
+}
+
 function SwatchCheck({ dark }: { dark: boolean }) {
   return (
     <svg
@@ -477,47 +510,34 @@ export function StickerEditor({
                   pageStart + BACKGROUND_PATTERNS_PAGE_SIZE
                 );
                 return (
-                  <div className="group mb-3">
+                  <div className="mb-3">
                     <div className="mb-2 flex items-center justify-between">
                       <p className="font-body text-xs font-bold text-cabinet-frame">
                         배경 패턴
                       </p>
-                      <div className="flex items-center gap-1">
-                        <button
-                          type="button"
-                          onClick={() =>
-                            setBgPage((p) => Math.max(0, p - 1))
-                          }
-                          disabled={clampedPage === 0}
-                          aria-label="이전 페이지"
-                          data-testid="background-prev"
-                          className="flex h-6 w-6 items-center justify-center rounded-full border border-cabinet-frame/40 bg-white font-marquee text-sm text-cabinet-frame shadow-soft transition active:scale-95 disabled:!opacity-30 [@media(hover:hover)]:scale-90 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:scale-100 [@media(hover:hover)]:group-hover:opacity-100 [@media(hover:hover)]:focus-visible:opacity-100"
-                        >
-                          ‹
-                        </button>
-                        <span className="min-w-[28px] text-center font-body text-[10px] font-bold text-cabinet-frame/80">
-                          {clampedPage + 1}/{totalBgPages}
-                        </span>
-                        <button
-                          type="button"
-                          onClick={() =>
-                            setBgPage((p) =>
-                              Math.min(totalBgPages - 1, p + 1)
-                            )
-                          }
-                          disabled={clampedPage === totalBgPages - 1}
-                          aria-label="다음 페이지"
-                          data-testid="background-next"
-                          className="flex h-6 w-6 items-center justify-center rounded-full border border-cabinet-frame/40 bg-white font-marquee text-sm text-cabinet-frame shadow-soft transition active:scale-95 disabled:!opacity-30 [@media(hover:hover)]:scale-90 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:scale-100 [@media(hover:hover)]:group-hover:opacity-100 [@media(hover:hover)]:focus-visible:opacity-100"
-                        >
-                          ›
-                        </button>
-                      </div>
+                      <span className="min-w-[28px] text-center font-body text-[10px] font-bold text-cabinet-frame/80">
+                        {clampedPage + 1}/{totalBgPages}
+                      </span>
                     </div>
-                    <div
-                      data-testid="background-pattern-grid"
-                      className="grid grid-cols-3 gap-2"
-                    >
+                    <div className="group relative">
+                      <EdgeArrow
+                        direction="prev"
+                        onClick={() => setBgPage((p) => Math.max(0, p - 1))}
+                        disabled={clampedPage === 0}
+                        testId="background-prev"
+                      />
+                      <EdgeArrow
+                        direction="next"
+                        onClick={() =>
+                          setBgPage((p) => Math.min(totalBgPages - 1, p + 1))
+                        }
+                        disabled={clampedPage === totalBgPages - 1}
+                        testId="background-next"
+                      />
+                      <div
+                        data-testid="background-pattern-grid"
+                        className="grid grid-cols-3 gap-2"
+                      >
                       {pagePatterns.map((p) => {
                         const isSelected =
                           background?.kind === "pattern" &&
@@ -553,6 +573,7 @@ export function StickerEditor({
                           </button>
                         );
                       })}
+                      </div>
                     </div>
                   </div>
                 );
@@ -683,47 +704,34 @@ export function StickerEditor({
               pageStart + emojiPageSize
             );
             return (
-              <div className="group">
+              <div>
                 <div className={spacious ? "mb-4 mt-2 flex items-center justify-between" : "mb-3 mt-2 flex items-center justify-between"}>
                   <p className={spacious ? "font-body text-sm font-bold text-cabinet-frame" : "font-body text-xs font-bold text-cabinet-frame"}>
                     이모지
                   </p>
-                  <div className="flex items-center gap-1">
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setEmojiPage((p) => Math.max(0, p - 1))
-                      }
-                      disabled={clampedPage === 0}
-                      aria-label="이전 페이지"
-                      data-testid="emoji-prev"
-                      className="flex h-6 w-6 items-center justify-center rounded-full border border-cabinet-frame/40 bg-white font-marquee text-sm text-cabinet-frame shadow-soft transition active:scale-95 disabled:!opacity-30 [@media(hover:hover)]:scale-90 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:scale-100 [@media(hover:hover)]:group-hover:opacity-100 [@media(hover:hover)]:focus-visible:opacity-100"
-                    >
-                      ‹
-                    </button>
-                    <span className="min-w-[28px] text-center font-body text-[10px] font-bold text-cabinet-frame/80">
-                      {clampedPage + 1}/{totalEmojiPages}
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setEmojiPage((p) =>
-                          Math.min(totalEmojiPages - 1, p + 1)
-                        )
-                      }
-                      disabled={clampedPage === totalEmojiPages - 1}
-                      aria-label="다음 페이지"
-                      data-testid="emoji-next"
-                      className="flex h-6 w-6 items-center justify-center rounded-full border border-cabinet-frame/40 bg-white font-marquee text-sm text-cabinet-frame shadow-soft transition active:scale-95 disabled:!opacity-30 [@media(hover:hover)]:scale-90 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:scale-100 [@media(hover:hover)]:group-hover:opacity-100 [@media(hover:hover)]:focus-visible:opacity-100"
-                    >
-                      ›
-                    </button>
-                  </div>
+                  <span className="min-w-[28px] text-center font-body text-[10px] font-bold text-cabinet-frame/80">
+                    {clampedPage + 1}/{totalEmojiPages}
+                  </span>
                 </div>
-                <div
-                  data-testid="emoji-grid"
-                  className={spacious ? "grid grid-cols-5 gap-3" : "grid grid-cols-4 gap-2"}
-                >
+                <div className="group relative">
+                  <EdgeArrow
+                    direction="prev"
+                    onClick={() => setEmojiPage((p) => Math.max(0, p - 1))}
+                    disabled={clampedPage === 0}
+                    testId="emoji-prev"
+                  />
+                  <EdgeArrow
+                    direction="next"
+                    onClick={() =>
+                      setEmojiPage((p) => Math.min(totalEmojiPages - 1, p + 1))
+                    }
+                    disabled={clampedPage === totalEmojiPages - 1}
+                    testId="emoji-next"
+                  />
+                  <div
+                    data-testid="emoji-grid"
+                    className={spacious ? "grid grid-cols-5 gap-3" : "grid grid-cols-4 gap-2"}
+                  >
                   {pageItems.map((item) =>
                     item.kind === "char" ? (
                       <button
@@ -767,6 +775,7 @@ export function StickerEditor({
                       </button>
                     )
                   )}
+                  </div>
                 </div>
               </div>
             );

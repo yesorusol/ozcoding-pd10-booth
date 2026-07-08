@@ -1,19 +1,18 @@
 /**
  * lib/normal-layout.ts — Polaroid sheet geometry for normal mode.
  *
- * Sheet matches the native size of `public/overlays/normal-frame.png`
- * (a pre-designed frame with headline/date/footer baked in and 4 white
- * cutout windows for the photos). Cell rects below were measured directly
- * off that PNG's white cutout bounding boxes, then inset a few px so a
- * rounded-rect-clipped photo tucks under the frame's rounded window border
- * instead of poking past its corners.
+ * Sheet matches the native size of `public/overlays/normal-frame.png` — a
+ * pre-designed, alpha-punched frame (headline/date/footer/decorations baked
+ * in, 4 photo windows cut fully transparent, including wherever a corner
+ * character overlaps a window). Photos are drawn FIRST at the cell rects
+ * below, then the frame is drawn on top; the frame's own alpha does all the
+ * masking, so no per-corner clipping or extraction hacks are needed. Rects
+ * are the frame's measured transparent-window bounds, expanded a few px so
+ * the photo fully bleeds under the window's anti-aliased alpha edge.
  */
 
 export const NORMAL_SHEET_WIDTH = 1086;
 export const NORMAL_SHEET_HEIGHT = 1448;
-
-/** Corner radius used to clip each photo so it matches the frame's rounded windows. */
-export const NORMAL_CELL_RADIUS = 20;
 
 export interface PolaroidCellRect {
   x: number;
@@ -23,22 +22,22 @@ export interface PolaroidCellRect {
   rotationDeg: number;
 }
 
-const CELL_INSET = 6;
+const BLEED = 4;
 
-/** Raw white-window bounding boxes measured from normal-frame.png. */
+/** Transparent-window bounding boxes measured from normal-frame.png. */
 const RAW_CELL_RECTS: ReadonlyArray<Omit<PolaroidCellRect, "rotationDeg">> = [
-  { x: 156, y: 292, width: 372, height: 438 },
-  { x: 562, y: 292, width: 374, height: 438 },
+  { x: 152, y: 288, width: 378, height: 444 },
+  { x: 562, y: 290, width: 376, height: 440 },
   { x: 156, y: 760, width: 372, height: 446 },
-  { x: 562, y: 760, width: 374, height: 446 },
+  { x: 562, y: 760, width: 376, height: 446 },
 ];
 
 export const NORMAL_CELL_RECTS: ReadonlyArray<PolaroidCellRect> =
   RAW_CELL_RECTS.map((r) => ({
-    x: r.x + CELL_INSET,
-    y: r.y + CELL_INSET,
-    width: r.width - CELL_INSET * 2,
-    height: r.height - CELL_INSET * 2,
+    x: r.x - BLEED,
+    y: r.y - BLEED,
+    width: r.width + BLEED * 2,
+    height: r.height + BLEED * 2,
     rotationDeg: 0,
   }));
 

@@ -17,9 +17,9 @@ export const FRAMES: ReadonlyArray<Frame> = [
   {
     id: "tamagotchi",
     src: "/frames/processed/tamagotchi.png",
-    label: "10기의 최애 디저트(?)",
-    labelEn: "10th-gen favorite dessert (?)",
-    tagline: "10기 하면 두쫀쿠지~",
+    label: "텔레토비 네컷",
+    labelEn: "Teletubbies group shot",
+    tagline: "텔레토비 텔레토비~ 다 같이 모여라!",
     gridIndex: 0,
   },
   {

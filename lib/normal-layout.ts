@@ -1,23 +1,19 @@
 /**
  * lib/normal-layout.ts — Polaroid sheet geometry for normal mode.
  *
- * Sheet is 1080×1440 (3:4 portrait). Borderless purikura layout:
- * 2×2 cells, flush edges, thin gaps, no per-cell rotation. A header
- * band sits at top and a footer band at bottom; the four photo cells
- * fill the middle with a thin gutter so the result reads as a sticker
- * sheet rather than a polaroid stack.
+ * Sheet matches the native size of `public/overlays/normal-frame.png`
+ * (a pre-designed frame with headline/date/footer baked in and 4 white
+ * cutout windows for the photos). Cell rects below were measured directly
+ * off that PNG's white cutout bounding boxes, then inset a few px so a
+ * rounded-rect-clipped photo tucks under the frame's rounded window border
+ * instead of poking past its corners.
  */
 
-export const NORMAL_SHEET_WIDTH = 1080;
-export const NORMAL_SHEET_HEIGHT = 1440;
-export const NORMAL_BACKGROUND = "#fff5f8";
+export const NORMAL_SHEET_WIDTH = 1086;
+export const NORMAL_SHEET_HEIGHT = 1448;
 
-/** Decorative band heights — referenced by both layout and composer. */
-export const NORMAL_HEADER_HEIGHT = 96;
-export const NORMAL_FOOTER_HEIGHT = 96;
-/** Outer margin & inter-cell gap. */
-export const NORMAL_MARGIN = 18;
-export const NORMAL_GUTTER = 14;
+/** Corner radius used to clip each photo so it matches the frame's rounded windows. */
+export const NORMAL_CELL_RADIUS = 20;
 
 export interface PolaroidCellRect {
   x: number;
@@ -27,41 +23,24 @@ export interface PolaroidCellRect {
   rotationDeg: number;
 }
 
-const innerLeft = NORMAL_MARGIN;
-const innerTop = NORMAL_HEADER_HEIGHT + NORMAL_MARGIN;
-const innerWidth = NORMAL_SHEET_WIDTH - NORMAL_MARGIN * 2;
-const innerHeight =
-  NORMAL_SHEET_HEIGHT -
-  NORMAL_HEADER_HEIGHT -
-  NORMAL_FOOTER_HEIGHT -
-  NORMAL_MARGIN * 2;
-const cellW = (innerWidth - NORMAL_GUTTER) / 2;
-const cellH = (innerHeight - NORMAL_GUTTER) / 2;
+const CELL_INSET = 6;
 
-export const NORMAL_CELL_RECTS: ReadonlyArray<PolaroidCellRect> = [
-  { x: innerLeft, y: innerTop, width: cellW, height: cellH, rotationDeg: 0 },
-  {
-    x: innerLeft + cellW + NORMAL_GUTTER,
-    y: innerTop,
-    width: cellW,
-    height: cellH,
+/** Raw white-window bounding boxes measured from normal-frame.png. */
+const RAW_CELL_RECTS: ReadonlyArray<Omit<PolaroidCellRect, "rotationDeg">> = [
+  { x: 156, y: 292, width: 372, height: 438 },
+  { x: 562, y: 292, width: 374, height: 438 },
+  { x: 156, y: 760, width: 372, height: 446 },
+  { x: 562, y: 760, width: 374, height: 446 },
+];
+
+export const NORMAL_CELL_RECTS: ReadonlyArray<PolaroidCellRect> =
+  RAW_CELL_RECTS.map((r) => ({
+    x: r.x + CELL_INSET,
+    y: r.y + CELL_INSET,
+    width: r.width - CELL_INSET * 2,
+    height: r.height - CELL_INSET * 2,
     rotationDeg: 0,
-  },
-  {
-    x: innerLeft,
-    y: innerTop + cellH + NORMAL_GUTTER,
-    width: cellW,
-    height: cellH,
-    rotationDeg: 0,
-  },
-  {
-    x: innerLeft + cellW + NORMAL_GUTTER,
-    y: innerTop + cellH + NORMAL_GUTTER,
-    width: cellW,
-    height: cellH,
-    rotationDeg: 0,
-  },
-] as const;
+  }));
 
 export function cellCenter(rect: PolaroidCellRect): { x: number; y: number } {
   return {

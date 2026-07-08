@@ -52,16 +52,13 @@ import {
 import { captureRawCut } from "@/lib/capture";
 import {
   composeOverlaySheet,
-  preloadAllPatternImages,
+  preloadNormalFrameImage,
 } from "@/lib/overlay-composer";
+import { NORMAL_SHEET_HEIGHT, NORMAL_SHEET_WIDTH } from "@/lib/normal-layout";
 import { composeStickersOnto } from "@/lib/sticker-composer";
 import { uploadSheet } from "@/lib/upload-sheet";
 import { TunnelHostUnavailableError, type Cut } from "@/lib/types";
 import type { PlacedStickerInstance } from "@/lib/sticker-assets";
-import {
-  DEFAULT_BACKGROUND,
-  type BackgroundChoice,
-} from "@/lib/background-assets";
 
 type DeniedStatus = Extract<CameraStatus, "denied" | "no-device" | "ended">;
 
@@ -90,13 +87,10 @@ export function PolaroidEditorFlow() {
   const [editorOpen, setEditorOpen] = useState(false);
   // Final-composite-and-upload in progress (after 완료 click).
   const [finalizing, setFinalizing] = useState(false);
-  // User's selected sheet background (pattern or solid color).
-  const [selectedBackground, setSelectedBackground] =
-    useState<BackgroundChoice>(DEFAULT_BACKGROUND);
 
-  // Warm pattern images so the editor's first re-compose feels instant.
+  // Warm the frame image so the first compose feels instant.
   useEffect(() => {
-    preloadAllPatternImages();
+    preloadNormalFrameImage();
   }, []);
 
   useEffect(() => {
@@ -203,7 +197,6 @@ export function PolaroidEditorFlow() {
       try {
         const blob = await composeOverlaySheet({
           cuts: state.cuts.map((c, i) => ({ index: i, imageBitmap: c.imageBitmap })),
-          background: selectedBackground,
         });
         if (cancelled) return;
         baseBlobRef.current = blob;
@@ -222,31 +215,7 @@ export function PolaroidEditorFlow() {
       // Don't revoke blobUrl here — editor still uses it. Cleanup happens
       // when the editor blob is replaced or RESET fires.
     };
-    // selectedBackground is intentionally read at first compose only — later
-    // bg changes go through onBackgroundChange.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.phase, state.cuts, router]);
-
-  // User picked a new sheet background → recompose preview.
-  const onBackgroundChange = useCallback(
-    async (next: BackgroundChoice) => {
-      setSelectedBackground(next);
-      try {
-        const blob = await composeOverlaySheet({
-          cuts: state.cuts.map((c, i) => ({ index: i, imageBitmap: c.imageBitmap })),
-          background: next,
-        });
-        baseBlobRef.current = blob;
-        // The useEffect cleanup below revokes the previous URL when this one
-        // replaces it — do NOT revoke manually here (the inline pattern
-        // double-fires under React 18 strict mode and can kill the new URL).
-        setSheetBlobUrl(URL.createObjectURL(blob));
-      } catch (err) {
-        console.error("background recompose failed:", err);
-      }
-    },
-    [state.cuts]
-  );
 
   // Editor 완료 → burn stickers, upload, advance to qr-display.
   const onEditorComplete = useCallback(
@@ -324,9 +293,7 @@ export function PolaroidEditorFlow() {
     return (
       <StickerEditor
         photoSrc={sheetBlobUrl}
-        aspectRatio={1080 / 1440}
-        background={selectedBackground}
-        onBackgroundChange={onBackgroundChange}
+        aspectRatio={NORMAL_SHEET_WIDTH / NORMAL_SHEET_HEIGHT}
         onComplete={onEditorComplete}
         onReset={onEditorReset}
       />

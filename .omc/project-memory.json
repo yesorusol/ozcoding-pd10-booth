@@ -180,8 +180,8 @@
     },
     {
       "path": "lib/overlay-composer.ts",
-      "accessCount": 23,
-      "lastAccessed": 1778422712865,
+      "accessCount": 24,
+      "lastAccessed": 1783479932044,
       "type": "file"
     },
     {
@@ -263,6 +263,12 @@
       "type": "file"
     },
     {
+      "path": "lib/normal-layout.ts",
+      "accessCount": 8,
+      "lastAccessed": 1783480010425,
+      "type": "file"
+    },
+    {
       "path": "components/LiveOverlay.test.tsx",
       "accessCount": 7,
       "lastAccessed": 1778236763389,
@@ -329,12 +335,6 @@
       "type": "file"
     },
     {
-      "path": "lib/normal-layout.ts",
-      "accessCount": 5,
-      "lastAccessed": 1778420270541,
-      "type": "file"
-    },
-    {
       "path": "app/api/captures/route.ts",
       "accessCount": 5,
       "lastAccessed": 1778486856838,
@@ -359,6 +359,12 @@
       "type": "file"
     },
     {
+      "path": "lib/normal-layout.test.ts",
+      "accessCount": 4,
+      "lastAccessed": 1783480002469,
+      "type": "file"
+    },
+    {
       "path": "components/CutPreview.tsx",
       "accessCount": 3,
       "lastAccessed": 1778236382295,
@@ -380,12 +386,6 @@
       "path": "lib/booth-mode.test.ts",
       "accessCount": 3,
       "lastAccessed": 1778237383626,
-      "type": "file"
-    },
-    {
-      "path": "lib/normal-layout.test.ts",
-      "accessCount": 3,
-      "lastAccessed": 1778237384397,
       "type": "file"
     },
     {

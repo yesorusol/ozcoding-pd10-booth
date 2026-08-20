@@ -63,7 +63,7 @@ export const DEFAULT_SHEET_BACKGROUND: BackgroundChoice = {
 
 /** Brand strings — kept identical to overlay-composer (normal mode) so
  * both sheets read as the same product. */
-const HEADLINE_KR = "10기와 추억남기기";
+const HEADLINE_KR = "11기와 추억남기기";
 const HEADLINE_EN = "OZCODING PD10 NETWORKING DAY";
 const FOOTER_TEXT = "2026.07.09 ⋆ MAKE MEMORIES ⋆ #PD10";
 

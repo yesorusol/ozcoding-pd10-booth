@@ -35,7 +35,7 @@ export const FRAMES: ReadonlyArray<Frame> = [
     src: "/frames/processed/burger.png",
     label: "버거 타임",
     labelEn: "Burger time",
-    tagline: "패티 10기~ 완성~",
+    tagline: "패티 11기~ 완성~",
     gridIndex: 2,
   },
   {
@@ -57,9 +57,9 @@ export const FRAMES: ReadonlyArray<Frame> = [
   {
     id: "cosplay",
     src: "/frames/processed/cosplay.png",
-    label: "프린세스 10기~",
-    labelEn: "Princess 10!",
-    tagline: "프린세스 10기~",
+    label: "프린세스 11기~",
+    labelEn: "Princess 11!",
+    tagline: "프린세스 11기~",
     gridIndex: 5,
   },
   {

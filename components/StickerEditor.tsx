@@ -628,7 +628,7 @@ export function StickerEditor({
                   addText();
                 }
               }}
-              placeholder="우주최강 식끼!"
+              placeholder="모카 식끼!"
               maxLength={MAX_TEXT_LENGTH}
               data-testid="text-sticker-input"
               className={

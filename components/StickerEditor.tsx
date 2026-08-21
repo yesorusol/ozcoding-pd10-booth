@@ -172,6 +172,7 @@ export function StickerEditor({
   const [textDraft, setTextDraft] = useState("");
   const [textColor, setTextColor] = useState<string>(DEFAULT_TEXT_COLOR);
   const photoRef = useRef<HTMLDivElement | null>(null);
+  const photoSectionRef = useRef<HTMLElement | null>(null);
   const dragOffsetRef = useRef<{ dx: number; dy: number } | null>(null);
   const draggingIdRef = useRef<string | null>(null);
   // Free-transform (resize + rotate) state. Set when user pointer-downs on
@@ -382,23 +383,49 @@ export function StickerEditor({
     transformStartRef.current = null;
   }, []);
 
-  // Wide-aspect sheets (challenge 2×4, aspectRatio > 1) blow past the
-  // viewport when sized by height alone — clamp to width-driven sizing
-  // AND scale back to 85% so the preview leaves breathing room around it.
-  // Tall sheets (normal 4-cut, aspectRatio < 1) stay height-driven so
-  // the photo zone fills the available vertical space.
-  const photoWrapperStyle: CSSProperties = aspectRatio >= 1
+  // The wrapper must render at EXACTLY `aspectRatio` or object-cover crops
+  // whichever axis overflows (this is how the reported "frame cut off on
+  // both sides" bug happened — a pure-CSS `height:100% + max-width:100%`
+  // combo left the box mismatched from the photo's true ratio whenever the
+  // viewport was narrower than tall). Plain CSS `aspect-ratio` can't derive
+  // a size from two max-constraints at once when both width/height are
+  // auto inside a non-stretching flex container (it collapses to 0), so we
+  // measure the available box with ResizeObserver and compute the largest
+  // exact-ratio rect that fits both axes ourselves.
+  const [fitSize, setFitSize] = useState<{ width: number; height: number } | null>(null);
+
+  useEffect(() => {
+    const section = photoSectionRef.current;
+    if (!section) return;
+    const scale = aspectRatio >= 1 ? 0.85 : 1; // breathing room for wide sheets only
+    const compute = (cw: number, ch: number) => {
+      let width = cw;
+      let height = width / aspectRatio;
+      if (height > ch) {
+        height = ch;
+        width = height * aspectRatio;
+      }
+      setFitSize({ width: width * scale, height: height * scale });
+    };
+    const ro = new ResizeObserver(([entry]) => {
+      const { width, height } = entry.contentRect;
+      if (width > 0 && height > 0) compute(width, height);
+    });
+    ro.observe(section);
+    return () => ro.disconnect();
+  }, [aspectRatio]);
+
+  const photoWrapperStyle: CSSProperties = fitSize
     ? {
-        aspectRatio: `${aspectRatio}`,
-        width: "85%",
-        maxWidth: "85%",
-        maxHeight: "85%",
+        width: `${fitSize.width}px`,
+        height: `${fitSize.height}px`,
         containerType: "inline-size",
       }
     : {
         aspectRatio: `${aspectRatio}`,
-        height: "100%",
+        width: aspectRatio >= 1 ? "85%" : "auto",
         maxWidth: "100%",
+        maxHeight: "100%",
         containerType: "inline-size",
       };
 
@@ -409,6 +436,7 @@ export function StickerEditor({
     >
       {/* Photo zone (left / top) */}
       <section
+        ref={photoSectionRef}
         data-testid="sticker-editor-photo-section"
         className="relative flex flex-1 items-center justify-center overflow-hidden bg-cabinet-frame/5 p-2 md:p-4"
       >

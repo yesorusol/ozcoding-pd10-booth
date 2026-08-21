@@ -73,9 +73,9 @@ export const FRAMES: ReadonlyArray<Frame> = [
   {
     id: "title-card",
     src: "/frames/processed/title-card.png",
-    label: "PD10",
-    labelEn: "PD10 Networking Day",
-    tagline: "OZCODING PD10 네트워킹 데이",
+    label: "PD11",
+    labelEn: "PD11 Networking Day",
+    tagline: "OZCODING PD11 네트워킹 데이",
     gridIndex: 7,
   },
 ] as const;

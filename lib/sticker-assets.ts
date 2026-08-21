@@ -18,10 +18,12 @@ export type StickerAsset = {
 const CHARS_DIR = "/stickers/chars";
 
 export const CHARACTER_STICKERS: ReadonlyArray<StickerAsset> = [
-  { id: "char-11", src: `${CHARS_DIR}/char-11.png`, label: "블루브레이즈 - 파란 브레이즈 안경 파랑옷" },
-  { id: "char-12", src: `${CHARS_DIR}/char-12.png`, label: "핑크베레 - 핑크 베레모 라일락 옷" },
-  { id: "char-13", src: `${CHARS_DIR}/char-13.png`, label: "축구공헤드 - 축구공 머리 빨강티" },
-  { id: "char-14", src: `${CHARS_DIR}/char-14.png`, label: "카우보이 - 갈색 카우보이햇 수염" },
+  { id: "char-11", src: `${CHARS_DIR}/char-11.png`, label: "히뎡조교 - 초록 후드 안경" },
+  { id: "char-12", src: `${CHARS_DIR}/char-12.png`, label: "지현매니저 - 핑크 곱슬머리" },
+  { id: "char-13", src: `${CHARS_DIR}/char-13.png`, label: "예훙코치 - 금발 안경" },
+  { id: "char-14", src: `${CHARS_DIR}/char-14.png`, label: "하연매니저 - 핑크 긴머리 강아지" },
+  { id: "char-15", src: `${CHARS_DIR}/char-15.png`, label: "유준매니저 - 은발 빨간티" },
+  { id: "char-16", src: `${CHARS_DIR}/char-16.png`, label: "혜인강사님 - 갈색머리 꽃다발" },
   { id: "char-01", src: `${CHARS_DIR}/char-01.png`, label: "블루캡 - 파란모자 빨간바지" },
   { id: "char-02", src: `${CHARS_DIR}/char-02.png`, label: "그린모자 - 검정티 선글라스" },
   { id: "char-03", src: `${CHARS_DIR}/char-03.png`, label: "옐로캡 - 노란모자 주황바지" },

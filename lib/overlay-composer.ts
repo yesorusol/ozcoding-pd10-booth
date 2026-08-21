@@ -1,7 +1,7 @@
 /**
  * lib/overlay-composer.ts — Normal-mode sheet composer.
  *
- * Composites the 4 captured cuts under `public/overlays/normal-frame.png` —
+ * Composites the 4 captured cuts under the selected normal-mode frame PNG —
  * a pre-designed, alpha-punched frame (headline/date/footer/decorations
  * baked in) whose 4 photo windows are cut fully transparent, including
  * wherever a corner character overlaps a window. Photos are drawn FIRST at
@@ -11,15 +11,17 @@
  *
  * Inputs:
  *   - cuts: 4 captured ImageBitmaps in capture order
+ *   - frameId: which frame design the user picked at onboarding
  *
  * Output: a NORMAL_SHEET_WIDTH×NORMAL_SHEET_HEIGHT PNG blob.
  */
 
 import { coverCrop } from "./cover-crop-math";
 import {
-  NORMAL_CELL_RECTS,
+  getNormalCellRects,
   NORMAL_SHEET_HEIGHT,
   NORMAL_SHEET_WIDTH,
+  type NormalFrameId,
 } from "./normal-layout";
 
 export interface OverlayComposerCut {
@@ -29,28 +31,34 @@ export interface OverlayComposerCut {
 
 export interface OverlayComposerOptions {
   cuts: ReadonlyArray<OverlayComposerCut>;
+  frameId: NormalFrameId;
 }
 
-const FRAME_SRC = "/overlays/normal-frame.png";
+const FRAME_SRC: Readonly<Record<NormalFrameId, string>> = {
+  clover: "/overlays/normal-frame-clover.png",
+  green: "/overlays/normal-frame-green.png",
+};
 
-let frameImagePromise: Promise<HTMLImageElement> | null = null;
+const frameImagePromises = new Map<NormalFrameId, Promise<HTMLImageElement>>();
 
-function loadFrameImage(): Promise<HTMLImageElement> {
-  if (!frameImagePromise) {
-    frameImagePromise = new Promise<HTMLImageElement>((resolve, reject) => {
+function loadFrameImage(frameId: NormalFrameId): Promise<HTMLImageElement> {
+  let promise = frameImagePromises.get(frameId);
+  if (!promise) {
+    promise = new Promise<HTMLImageElement>((resolve, reject) => {
       const img = new Image();
       img.crossOrigin = "anonymous";
       img.onload = () => resolve(img);
       img.onerror = (e) => reject(e);
-      img.src = FRAME_SRC;
+      img.src = FRAME_SRC[frameId];
     });
+    frameImagePromises.set(frameId, promise);
   }
-  return frameImagePromise;
+  return promise;
 }
 
 /** Best-effort eager preload — caller can fire-and-forget at editor open. */
-export function preloadNormalFrameImage(): void {
-  void loadFrameImage().catch(() => {
+export function preloadNormalFrameImage(frameId: NormalFrameId): void {
+  void loadFrameImage(frameId).catch(() => {
     /* ignore — paintFrame handles failure */
   });
 }
@@ -58,7 +66,7 @@ export function preloadNormalFrameImage(): void {
 export async function composeOverlaySheet(
   options: OverlayComposerOptions,
 ): Promise<Blob> {
-  const { cuts } = options;
+  const { cuts, frameId } = options;
 
   if (cuts.length !== 4) {
     throw new Error(
@@ -74,8 +82,9 @@ export async function composeOverlaySheet(
     throw new Error("composeOverlaySheet: 2D canvas context unavailable");
   }
 
-  for (let i = 0; i < NORMAL_CELL_RECTS.length; i++) {
-    const rect = NORMAL_CELL_RECTS[i];
+  const cellRects = getNormalCellRects(frameId);
+  for (let i = 0; i < cellRects.length; i++) {
+    const rect = cellRects[i];
     const cut = cuts[i];
     if (!cut || !cut.imageBitmap) continue;
 
@@ -84,7 +93,7 @@ export async function composeOverlaySheet(
     ctx.drawImage(bmp, c.sx, c.sy, c.sw, c.sh, rect.x, rect.y, rect.width, rect.height);
   }
 
-  await paintFrame(ctx);
+  await paintFrame(ctx, frameId);
 
   return new Promise<Blob>((resolve, reject) => {
     canvas.toBlob((blob) => {
@@ -94,9 +103,12 @@ export async function composeOverlaySheet(
   });
 }
 
-async function paintFrame(ctx: CanvasRenderingContext2D): Promise<void> {
+async function paintFrame(
+  ctx: CanvasRenderingContext2D,
+  frameId: NormalFrameId,
+): Promise<void> {
   try {
-    const img = await loadFrameImage();
+    const img = await loadFrameImage(frameId);
     ctx.drawImage(img, 0, 0, NORMAL_SHEET_WIDTH, NORMAL_SHEET_HEIGHT);
   } catch {
     /* frame decorations/text just won't render — photos still show */

@@ -54,7 +54,11 @@ import {
   composeOverlaySheet,
   preloadNormalFrameImage,
 } from "@/lib/overlay-composer";
-import { NORMAL_SHEET_HEIGHT, NORMAL_SHEET_WIDTH } from "@/lib/normal-layout";
+import {
+  NORMAL_SHEET_HEIGHT,
+  NORMAL_SHEET_WIDTH,
+  type NormalFrameId,
+} from "@/lib/normal-layout";
 import { composeStickersOnto } from "@/lib/sticker-composer";
 import { uploadSheet } from "@/lib/upload-sheet";
 import { TunnelHostUnavailableError, type Cut } from "@/lib/types";
@@ -71,7 +75,11 @@ function cameraErrorKindFor(status: CameraStatus): CameraErrorKind | null {
 
 const polaroidReducer = createReducer(NORMAL_CUTS);
 
-export function PolaroidEditorFlow() {
+export interface PolaroidEditorFlowProps {
+  frameId: NormalFrameId;
+}
+
+export function PolaroidEditorFlow({ frameId }: PolaroidEditorFlowProps) {
   const router = useRouter();
   const camera = useCamera();
   const [state, dispatch] = useReducer(polaroidReducer, undefined, () => ({
@@ -90,8 +98,8 @@ export function PolaroidEditorFlow() {
 
   // Warm the frame image so the first compose feels instant.
   useEffect(() => {
-    preloadNormalFrameImage();
-  }, []);
+    preloadNormalFrameImage(frameId);
+  }, [frameId]);
 
   useEffect(() => {
     camera.start();
@@ -197,6 +205,7 @@ export function PolaroidEditorFlow() {
       try {
         const blob = await composeOverlaySheet({
           cuts: state.cuts.map((c, i) => ({ index: i, imageBitmap: c.imageBitmap })),
+          frameId,
         });
         if (cancelled) return;
         baseBlobRef.current = blob;
@@ -215,7 +224,7 @@ export function PolaroidEditorFlow() {
       // Don't revoke blobUrl here — editor still uses it. Cleanup happens
       // when the editor blob is replaced or RESET fires.
     };
-  }, [state.phase, state.cuts, router]);
+  }, [state.phase, state.cuts, router, frameId]);
 
   // Editor 완료 → burn stickers, upload, advance to qr-display.
   const onEditorComplete = useCallback(

@@ -12,12 +12,14 @@
 
 import { useSearchParams } from "next/navigation";
 import { parseBoothMode } from "@/lib/booth-mode";
+import { parseNormalFrameId } from "@/lib/normal-layout";
 import { ThemedFlow } from "./ThemedFlow";
 import { PolaroidEditorFlow } from "./PolaroidEditorFlow";
 
 export function BoothPageRouter() {
   const searchParams = useSearchParams();
   const mode = parseBoothMode(searchParams.get("mode"));
-  if (mode === "normal") return <PolaroidEditorFlow />;
+  const frameId = parseNormalFrameId(searchParams.get("frame"));
+  if (mode === "normal") return <PolaroidEditorFlow frameId={frameId} />;
   return <ThemedFlow />;
 }

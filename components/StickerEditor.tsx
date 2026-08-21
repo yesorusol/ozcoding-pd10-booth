@@ -656,7 +656,7 @@ export function StickerEditor({
                   addText();
                 }
               }}
-              placeholder="모카 식끼!"
+              placeholder="모카 11기~!"
               maxLength={MAX_TEXT_LENGTH}
               data-testid="text-sticker-input"
               className={
